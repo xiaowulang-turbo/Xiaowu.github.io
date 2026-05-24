@@ -1,0 +1,93 @@
+---
+/**
+ * BaseLayout.astro — 全站基础布局
+ *
+ * 职责：
+ * 1. 注入主题防闪 inline 脚本（在 paint 之前设置 data-theme）
+ * 2. SEO meta（title / description / OG / canonical）
+ * 3. 引入全局样式（tokens.css + globals.css）
+ * 4. 渲染 SiteNav 与 SiteFooter
+ *
+ * 不包含：业务区块（由具体页面组装）
+ */
+import "@styles/tokens.css";
+import "@styles/globals.css";
+
+import SiteNav from "@components/ui/SiteNav.astro";
+import SiteFooter from "@components/ui/SiteFooter.astro";
+import { SITE } from "@data/site";
+import { t } from "@i18n/index";
+
+interface Props {
+  /** 页面标题（最终显示为 "<title> · Xiaowu"，首页传 undefined） */
+  title?: string;
+  /** 页面描述（覆盖 SITE.description） */
+  description?: string;
+  /** 是否禁止搜索引擎索引 */
+  noindex?: boolean;
+}
+
+const { title, description, noindex = false } = Astro.props;
+
+const finalTitle = title ? `${title} · ${SITE.name}` : `${SITE.name} — ${SITE.tagline}`;
+const finalDescription = description ?? SITE.description;
+const canonical = new URL(Astro.url.pathname, SITE.url).href;
+---
+
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="generator" content={Astro.generator} />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="canonical" href={canonical} />
+
+    <title>{finalTitle}</title>
+    <meta name="description" content={finalDescription} />
+    <meta name="author" content={SITE.author} />
+    {noindex && <meta name="robots" content="noindex,nofollow" />}
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:title" content={finalTitle} />
+    <meta property="og:description" content={finalDescription} />
+    <meta property="og:site_name" content={SITE.name} />
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:title" content={finalTitle} />
+    <meta name="twitter:description" content={finalDescription} />
+
+    <!--
+      主题防闪：必须在 paint 之前同步执行。
+      读取 localStorage["theme"]，若为 light/dark 则立即设置 <html data-theme>。
+      若为 system 或缺省则不设置（CSS 的 prefers-color-scheme 媒体查询接管）。
+    -->
+    <script is:inline>
+      (() => {
+        try {
+          const stored = localStorage.getItem("theme");
+          if (stored === "light" || stored === "dark") {
+            document.documentElement.setAttribute("data-theme", stored);
+          }
+        } catch (_) {
+          /* localStorage 不可用时静默失败 */
+        }
+      })();
+    </script>
+  </head>
+
+  <body>
+    <a href="#main" class="skip-link">{t("common.skipToContent")}</a>
+
+    <SiteNav pathname={Astro.url.pathname.replace(/\/$/, "") || "/"} />
+
+    <main id="main">
+      <slot />
+    </main>
+
+    <SiteFooter />
+  </body>
+</html>

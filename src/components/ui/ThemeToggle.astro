@@ -1,0 +1,148 @@
+---
+/**
+ * ThemeToggle.astro
+ *
+ * 三态循环切换器：system → light → dark → system
+ * 数据-状态：通过 [data-theme-state] 暴露给 CSS 控制图标显示
+ */
+import { t } from "@i18n/index";
+---
+
+<button
+  type="button"
+  class="theme-toggle"
+  aria-label={t("theme.toggle")}
+  data-theme-state="system"
+>
+  <!-- system: 显示为月亮+太阳的复合（用一个简洁的"环"字符替代以保持极简） -->
+  <svg
+    class="icon icon-system"
+    width="18"
+    height="18"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    stroke-width="1.5"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+    aria-hidden="true"
+  >
+    <rect x="3" y="4" width="18" height="14" rx="2"></rect>
+    <path d="M8 21h8"></path>
+    <path d="M12 18v3"></path>
+  </svg>
+  <svg
+    class="icon icon-sun"
+    width="18"
+    height="18"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    stroke-width="1.5"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+    aria-hidden="true"
+  >
+    <circle cx="12" cy="12" r="4"></circle>
+    <path d="M12 2v2"></path>
+    <path d="M12 20v2"></path>
+    <path d="m4.93 4.93 1.41 1.41"></path>
+    <path d="m17.66 17.66 1.41 1.41"></path>
+    <path d="M2 12h2"></path>
+    <path d="M20 12h2"></path>
+    <path d="m4.93 19.07 1.41-1.41"></path>
+    <path d="m17.66 6.34 1.41-1.41"></path>
+  </svg>
+  <svg
+    class="icon icon-moon"
+    width="18"
+    height="18"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    stroke-width="1.5"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+    aria-hidden="true"
+  >
+    <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+  </svg>
+</button>
+
+<style>
+  .theme-toggle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    padding: 0;
+    background: transparent;
+    color: var(--color-text-muted);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius);
+    cursor: pointer;
+    transition:
+      color var(--dur-fast) var(--ease),
+      border-color var(--dur-fast) var(--ease),
+      background-color var(--dur-fast) var(--ease);
+  }
+
+  .theme-toggle:hover {
+    color: var(--color-text);
+    border-color: var(--color-border-strong);
+    background-color: var(--color-bg-muted);
+  }
+
+  .icon {
+    display: none;
+  }
+
+  .theme-toggle[data-theme-state="system"] .icon-system {
+    display: block;
+  }
+  .theme-toggle[data-theme-state="light"] .icon-sun {
+    display: block;
+  }
+  .theme-toggle[data-theme-state="dark"] .icon-moon {
+    display: block;
+  }
+</style>
+
+<script>
+  import { getStoredTheme, setTheme, watchSystemTheme } from "@lib/theme";
+  import type { Theme } from "@lib/theme";
+
+  const ORDER: readonly Theme[] = ["system", "light", "dark"] as const;
+
+  function syncButtonState(button: HTMLButtonElement, theme: Theme): void {
+    button.setAttribute("data-theme-state", theme);
+  }
+
+  function init(): void {
+    const buttons =
+      document.querySelectorAll<HTMLButtonElement>(".theme-toggle");
+    if (buttons.length === 0) return;
+
+    const current = getStoredTheme();
+    for (const btn of buttons) syncButtonState(btn, current);
+
+    for (const btn of buttons) {
+      btn.addEventListener("click", () => {
+        const now = getStoredTheme();
+        const idx = ORDER.indexOf(now);
+        const next = ORDER[(idx + 1) % ORDER.length] ?? "system";
+        setTheme(next);
+        for (const b of buttons) syncButtonState(b, next);
+      });
+    }
+
+    watchSystemTheme();
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", init);
+  } else {
+    init();
+  }
+</script>

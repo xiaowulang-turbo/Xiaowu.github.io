@@ -1,0 +1,98 @@
+---
+/**
+ * SiteFooter.astro — 页脚（克制单行版）
+ */
+import { SITE } from "@data/site";
+import { SOCIAL } from "@data/social";
+import { t } from "@i18n/index";
+
+const year = new Date().getFullYear();
+---
+
+<footer class="site-footer">
+  <div class="container footer-inner">
+    <p class="copyright">
+      <span>© {year} {SITE.author} / {SITE.aka}</span>
+      <span class="sep" aria-hidden="true">·</span>
+      <span class="license">{t("footer.licenseLabel")}</span>
+    </p>
+
+    <ul class="links">
+      {
+        SOCIAL.map((s) => (
+          <li>
+            <a
+              href={s.href}
+              class="footer-link"
+              {...(s.external
+                ? { target: "_blank", rel: "noopener noreferrer" }
+                : {})}
+            >
+              {t(s.labelKey)}
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+
+    <p class="built">{t("footer.builtWith")}</p>
+  </div>
+</footer>
+
+<style>
+  .site-footer {
+    padding-block: var(--space-8);
+    border-top: 1px solid var(--color-border);
+    color: var(--color-text-subtle);
+    font-size: var(--text-caption);
+  }
+
+  .footer-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: var(--space-4);
+  }
+
+  .copyright {
+    display: inline-flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+    margin: 0;
+  }
+
+  .sep {
+    color: var(--color-text-subtle);
+  }
+
+  .links {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-4);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .footer-link {
+    color: var(--color-text-subtle);
+    transition: color var(--dur-fast) var(--ease);
+  }
+
+  .footer-link:hover {
+    color: var(--color-text);
+  }
+
+  .built {
+    margin: 0;
+    font-style: italic;
+  }
+
+  @media (max-width: 640px) {
+    .built {
+      width: 100%;
+    }
+  }
+</style>

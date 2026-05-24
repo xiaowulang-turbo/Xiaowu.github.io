@@ -1,0 +1,93 @@
+---
+/**
+ * PlaceholderPage.astro — Quiet Construction 占位区块
+ *
+ * 用于 v0.5 阶段的板块占位页。
+ * 结构：H1 标题 + 一段板块定位 + 一行 phase 标识 + 路线图链接。
+ */
+import { SITE } from "@data/site";
+import { t } from "@i18n/index";
+
+interface Props {
+  /** 板块标题（已翻译） */
+  title: string;
+  /** 板块定位描述（已翻译） */
+  description: string;
+}
+
+const { title, description } = Astro.props;
+---
+
+<section class="placeholder">
+  <div class="container placeholder-inner">
+    <h1 class="title">{title}</h1>
+    <p class="description">{description}</p>
+
+    <p class="phase">
+      <span class="phase-dot" aria-hidden="true"></span>
+      <span>{t("placeholder.phase")}</span>
+      <span class="sep" aria-hidden="true">·</span>
+      <a class="phase-link" href={`${SITE.repo}/blob/main/docs/ROADMAP.md`} target="_blank" rel="noopener noreferrer">
+        {t("placeholder.roadmap")}
+      </a>
+    </p>
+  </div>
+</section>
+
+<style>
+  .placeholder {
+    padding-block: var(--space-24) var(--space-16);
+  }
+
+  .placeholder-inner {
+    max-width: var(--prose-max);
+    text-align: left;
+  }
+
+  .title {
+    margin-bottom: var(--space-6);
+  }
+
+  .description {
+    color: var(--color-text-muted);
+    font-size: 1.125rem;
+    line-height: var(--leading-relaxed);
+    margin-bottom: var(--space-12);
+  }
+
+  .phase {
+    display: inline-flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+    margin: 0;
+    color: var(--color-text-subtle);
+    font-size: var(--text-caption);
+  }
+
+  .phase-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: var(--radius-full);
+    background-color: var(--color-accent);
+  }
+
+  .sep {
+    color: var(--color-text-subtle);
+  }
+
+  .phase-link {
+    color: var(--color-text-muted);
+    text-decoration: none;
+    border-bottom: 1px solid var(--color-border-strong);
+    padding-bottom: 1px;
+    transition:
+      color var(--dur-fast) var(--ease),
+      border-color var(--dur-fast) var(--ease);
+  }
+
+  .phase-link:hover {
+    color: var(--color-text);
+    border-color: var(--color-accent);
+  }
+</style>
