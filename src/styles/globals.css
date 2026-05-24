@@ -176,3 +176,37 @@ code {
 .skip-link:focus-visible {
   top: var(--space-4);
 }
+
+/* ============================================================
+ * Reveal-on-scroll（按 STYLE_GUIDE §5.3 规范）
+ *
+ * - opt-in：仅 [data-reveal] 元素经 JS 切换后获得动画
+ * - 默认状态完全可见，无 JS 失败时不影响渲染
+ * - 由 src/lib/reveal.ts 通过 IntersectionObserver 添加 .is-revealed
+ * - reduced-motion 下直接显示无动画
+ * ============================================================ */
+[data-reveal] {
+  /* 默认可见 —— 这是关键：JS 不加载也保证内容可读 */
+  opacity: 1;
+  transform: none;
+}
+
+/* JS 注入 hydration 标志后才启用动画过渡 */
+:root.js [data-reveal]:not(.is-revealed) {
+  opacity: 0;
+  transform: translateY(12px);
+  transition: opacity var(--dur-normal) var(--ease-out), transform var(--dur-normal) var(--ease-out);
+}
+
+:root.js [data-reveal].is-revealed {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root.js [data-reveal] {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+  }
+}

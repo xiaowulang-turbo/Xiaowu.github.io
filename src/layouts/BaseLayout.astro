@@ -64,6 +64,10 @@ const canonical = new URL(Astro.url.pathname, SITE.url).href;
       主题防闪：必须在 paint 之前同步执行。
       读取 localStorage["theme"]，若为 light/dark 则立即设置 <html data-theme>。
       若为 system 或缺省则不设置（CSS 的 prefers-color-scheme 媒体查询接管）。
+
+      同时为 <html> 添加 .js class —— 这是渐进增强标记：
+      仅在 JS 可用时启用 reveal 动画等增强行为；
+      JS 失败时所有内容保持完全可见（无障碍）。
     -->
     <script is:inline>
       (() => {
@@ -75,6 +79,7 @@ const canonical = new URL(Astro.url.pathname, SITE.url).href;
         } catch (_) {
           /* localStorage 不可用时静默失败 */
         }
+        document.documentElement.classList.add("js");
       })();
     </script>
   </head>
@@ -89,5 +94,15 @@ const canonical = new URL(Astro.url.pathname, SITE.url).href;
     </main>
 
     <SiteFooter />
+
+    <script>
+      import { initReveal } from "@lib/reveal";
+
+      if (document.readyState === "loading") {
+        document.addEventListener("DOMContentLoaded", initReveal);
+      } else {
+        initReveal();
+      }
+    </script>
   </body>
 </html>
