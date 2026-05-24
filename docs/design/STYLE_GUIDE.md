@@ -238,6 +238,31 @@ Code 0.9375rem                     family: var(--font-mono)
 - **Theme switch**: html 的 `color-scheme` 切换 0ms（避免闪烁），元素颜色 200ms 过渡
 - **View Transitions API**（未来）：跨路由的细微过渡
 
+### 5.4 Reveal-on-scroll（页面级入场）
+
+> 受控的渐进增强：模块进入视口时执行一次 fade-up 入场。
+
+**统一规范**：
+
+- 实现：`src/lib/reveal.ts` + `data-reveal` 属性 opt-in
+- 仅 ≥ 模块级元素使用（如 `<section>`），**禁止**用于段落、按钮、单个组件
+- 进入条件：元素进入视口下边缘 12% 时触发
+- 一次性：进入后 `unobserve`，不做"出 → 入"循环
+- 渐进增强：`<html>` 添加 `.js` class 后才启用过渡，无 JS 时元素立即可见
+- 减弱动效（`prefers-reduced-motion: reduce`）下：直接显示，无过渡
+
+**红线 ⛔**：
+
+- ⛔ 不允许把 reveal 用于 hero 之类首屏元素（首屏内容必须立即可见）
+- ⛔ 不允许在同一视口同时触发 ≥ 4 个 reveal（造成"涌入感"）
+- ⛔ 不允许同一元素 reveal 触发后再次"消失"
+
+**全局透明度**：
+
+- 默认 `opacity: 0` + `translateY(12px)`
+- 入场后：`opacity: 1` + `translateY(0)`
+- 时长 `--dur-normal`（200ms），缓动 `--ease-out`
+
 ---
 
 ## 6. 焦点与可访问性

@@ -52,15 +52,22 @@
 - [ ] 配置文件落地（`astro.config.ts` / `tsconfig.json` / `biome.json` / `package.json`）
 - [ ] `src/styles/tokens.css` 完整实现（与 `DESIGN_TOKENS.md` 一致）
 - [ ] `src/styles/globals.css` reset + 基础排版
-- [ ] `src/content/config.ts` 7 个 collection 的 Zod Schema
-- [ ] `BaseLayout.astro` 含主题防闪 inline 脚本
-- [ ] 五大路由占位页（"Quiet Construction" 风格）
-- [ ] `<ThemeToggle>` 三态切换 + 持久化
-- [ ] `<SiteNav>` 顶部主导航
-- [ ] 临时 favicon（手写极简 SVG）
-- [ ] 本地验证：`pnpm dev` / `pnpm build` / `pnpm check` 全部通过
-- [ ] 部署到 Vercel 替换旧 `Hello World`
-- [ ] 验证生产环境：主题切换、五个路由、移动端响应式
+- [x] `src/content/config.ts` 7 个 collection 的 Zod Schema
+- [x] `BaseLayout.astro` 含主题防闪 inline 脚本
+- [x] 五大路由占位页（"Quiet Construction" 风格）
+- [x] `<ThemeToggle>` 三态切换 + 持久化
+- [x] `<SiteNav>` 顶部主导航
+- [x] 临时 favicon（手写极简 SVG）
+- [x] 本地验证：`pnpm dev` / `pnpm build` / `pnpm check` 全部通过
+- [x] 部署到 Vercel 替换旧 `Hello World`
+- [x] 验证生产环境：主题切换、五个路由、移动端响应式
+- [x] 修复 Sticky footer 与 nav tab 等高（v0.5 上线后细节优化）
+
+---
+
+## v0.5 → v1.0 过渡（进行中）
+
+- [ ] **RFC-0002: About Section** —— 个人简历型 about 页（**等待用户确认**）
 
 ---
 
@@ -74,10 +81,16 @@
 - [ ] Latest Thoughts（最新 3 篇，跨 thoughts + ai-insights）
 - [ ] About 入口卡片
 
-### About
-- [ ] 锚点侧边导航
-- [ ] 概述 / 技能栈 / 经历（脱敏）/ 联系方式 四节
-- [ ] 简历 PDF 下载（脱敏版，可选）
+### About（详见 RFC-0002）
+- [ ] M1 Hero：极简自我陈述 + Kirito 彩蛋
+- [ ] M2 Trajectory：4 节点成长轨迹图（含 hover 展开）
+- [ ] M3 Now：当前两个 Agent 项目（核心硬通货）
+- [ ] M4 Track Record：反时间线工作 / 实习经历
+- [ ] M5 Stack：四档技能栈（Agent & AI 第一档）
+- [ ] M6 Education：低调学历
+- [ ] M7 Three Things to Be Asked：三问（占位）
+- [ ] M8 Want More：深读入口
+- [ ] 隐私自查 + 信息密度自查
 - [ ] 联系方式以「点击复制」形式呈现 Email
 
 ### Projects

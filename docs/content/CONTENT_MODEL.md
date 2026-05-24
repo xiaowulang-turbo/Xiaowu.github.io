@@ -170,33 +170,32 @@
 }
 ```
 
-### 2.7 `about`
+### 2.7 `about`（结构化数据，非 collection）
 
-> 路径：`src/content/about/index.mdx`（**单文件结构化**）
+> 路径：`src/data/about.ts`
 > 路由：`/about`
+> 形态：**TypeScript 模块 + Zod 加载时校验**，**不是** Content Collection
 
-```ts
-{
-  signature: {
-    name: "Xiaowu" | "Kirito";          // 主署名
-    aka?: string[];                     // 其他署名
-    tagline: string;                    // 一句自我描述
-  };
-  contact: {
-    email?: string;                     // 仅暴露经许可的邮箱
-    github?: string;
-    other?: { label: string; href: string }[];
-  };
-  sections: {
-    id: string;                         // 锚点 id
-    title: string;
-    body: string;                       // MDX
-  }[];
-}
-```
+**为什么不用 collection**：about 是单文档、结构化、无 mdx 需求；放进 `src/data/` 与
+`site.ts` / `nav.ts` / `social.ts` 形态一致，避免 collection runtime 的多余开销。
 
-> **隐私强提醒**：`about` collection 的所有字段都可能涉及敏感信息。
+详细字段定义见 [`docs/rfcs/0002-about-section.md`](../rfcs/0002-about-section.md) §7。
+Schema 实施于 `src/data/about.ts`，约束包括：
+
+- `signature`：name / aka / akaTease（Kirito 彩蛋）/ tagline / intent / meta
+- `trajectory`：4 个里程碑节点（`{date, org, role, label, hover?, highlight}`）
+- `nowProjects`：当前两个 Agent 项目（含 keywords + tagline 占位）
+- `experiences`：反时间线工作经历（删 Vben，删 Renren 仅留 3 段）
+- `stack`：4 档技能栈（`agentAndAi` / `daily` / `comfortable` / `curious`）
+- `education`：学历（CET-6 字段 schema 预留、不渲染）
+- `questionsToBeAsked`：3 个开放问题（强制长度 = 3，v1.0 占位）
+- `wantMore`：深读入口链接
+- `contact`：email
+- `lastUpdated`：自更新时间戳
+
+> **隐私强提醒**：`about` 的所有字段都可能涉及敏感信息。
 > 写入前必须按 `AGENTS.md` §1.3 流程逐项询问。
+> v1.0 字段处理决策见 RFC-0002 §6 隐私自查矩阵。
 
 ---
 
