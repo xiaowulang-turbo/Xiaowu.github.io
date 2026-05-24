@@ -1,0 +1,12 @@
+---
+import BaseLayout from "@layouts/BaseLayout.astro";
+import PlaceholderPage from "@components/sections/PlaceholderPage.astro";
+import { t } from "@i18n/index";
+---
+
+<BaseLayout title={t("page.about.title")} description={t("page.about.placeholder")}>
+  <PlaceholderPage
+    title={t("page.about.title")}
+    description={`${t("page.about.intro")} ${t("page.about.placeholder")}`}
+  />
+</BaseLayout>

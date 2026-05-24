@@ -44,3 +44,6 @@ coverage/
 
 # --- AI scratch ---
 .codebuddy/scratch/
+
+# Local AI scratch logs
+commit.log

@@ -1,0 +1,109 @@
+---
+import BaseLayout from "@layouts/BaseLayout.astro";
+import { SITE } from "@data/site";
+import { t } from "@i18n/index";
+---
+
+<BaseLayout>
+  <section class="hero">
+    <div class="container hero-inner">
+      <p class="eyebrow">{t("placeholder.phase")}</p>
+
+      <h1 class="display">
+        <span class="line">{SITE.name}</span>
+        <span class="line muted">— {SITE.aka}</span>
+      </h1>
+
+      <p class="tagline">{SITE.tagline}</p>
+
+      <p class="intro">{t("page.home.intro")}</p>
+
+      <p class="rebuild">{t("page.home.rebuild")}</p>
+
+      <p class="roadmap-line">
+        <a
+          class="roadmap-link"
+          href={`${SITE.repo}/blob/main/docs/ROADMAP.md`}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          {t("placeholder.roadmap")} →
+        </a>
+      </p>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .hero {
+    padding-block: var(--space-32) var(--space-16);
+  }
+
+  .hero-inner {
+    max-width: var(--hero-max);
+  }
+
+  .eyebrow {
+    margin: 0 0 var(--space-8);
+    color: var(--color-text-subtle);
+    font-size: var(--text-caption);
+    letter-spacing: var(--tracking-wide);
+    text-transform: uppercase;
+  }
+
+  .display {
+    margin: 0 0 var(--space-8);
+    font-size: clamp(3rem, 7vw, 5rem);
+    line-height: 1.05;
+    letter-spacing: var(--tracking-tight);
+    font-weight: var(--font-weight-semibold);
+  }
+
+  .line {
+    display: block;
+  }
+
+  .line.muted {
+    color: var(--color-text-subtle);
+    font-weight: var(--font-weight-normal);
+    font-size: 0.55em;
+    margin-top: var(--space-2);
+    letter-spacing: var(--tracking-snug);
+  }
+
+  .tagline {
+    margin: 0 0 var(--space-12);
+    color: var(--color-text-muted);
+    font-size: clamp(1.125rem, 1.6vw, 1.375rem);
+    font-style: italic;
+  }
+
+  .intro,
+  .rebuild {
+    margin: 0 0 var(--space-6);
+    max-width: var(--prose-max);
+    color: var(--color-text);
+    font-size: 1.0625rem;
+    line-height: var(--leading-relaxed);
+  }
+
+  .rebuild {
+    color: var(--color-text-muted);
+  }
+
+  .roadmap-line {
+    margin: var(--space-8) 0 0;
+  }
+
+  .roadmap-link {
+    color: var(--color-text);
+    border-bottom: 1px solid var(--color-accent);
+    padding-bottom: 2px;
+    font-size: var(--text-small);
+    transition: color var(--dur-fast) var(--ease);
+  }
+
+  .roadmap-link:hover {
+    color: var(--color-accent);
+  }
+</style>

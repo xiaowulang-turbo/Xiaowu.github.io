@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" role="img" aria-label="Xiaowu">
+  <style>
+    :root, svg { color: #18181B; }
+    @media (prefers-color-scheme: dark) {
+      :root, svg { color: #FAFAFA; }
+    }
+  </style>
+  <rect x="3.5" y="3.5" width="25" height="25" rx="5" ry="5" fill="none" stroke="currentColor" stroke-width="1.5"/>
+  <path d="M11 11 L21 21 M21 11 L11 21" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+</svg>

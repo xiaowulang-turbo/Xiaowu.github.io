@@ -1,0 +1,66 @@
+---
+import BaseLayout from "@layouts/BaseLayout.astro";
+import { t } from "@i18n/index";
+---
+
+<BaseLayout title={t("page.404.title")} noindex>
+  <section class="not-found">
+    <div class="container nf-inner">
+      <p class="code">404</p>
+      <p class="quote">{t("page.404.body")}</p>
+      <p class="kirito">{t("page.404.kirito")}</p>
+      <p class="back">
+        <a href="/" class="back-link">← {t("page.404.back")}</a>
+      </p>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .not-found {
+    padding-block: var(--space-32) var(--space-24);
+  }
+
+  .nf-inner {
+    max-width: var(--prose-max);
+    text-align: left;
+  }
+
+  .code {
+    margin: 0 0 var(--space-6);
+    font-family: var(--font-mono);
+    font-size: clamp(3rem, 7vw, 4.5rem);
+    line-height: 1;
+    color: var(--color-text);
+    letter-spacing: var(--tracking-tight);
+  }
+
+  .quote {
+    margin: 0 0 var(--space-4);
+    color: var(--color-text);
+    font-size: 1.125rem;
+    line-height: var(--leading-relaxed);
+    font-style: italic;
+  }
+
+  .kirito {
+    margin: 0 0 var(--space-12);
+    color: var(--color-text-subtle);
+    font-size: var(--text-caption);
+  }
+
+  .back-link {
+    color: var(--color-text-muted);
+    border-bottom: 1px solid var(--color-border-strong);
+    padding-bottom: 1px;
+    font-size: var(--text-small);
+    transition:
+      color var(--dur-fast) var(--ease),
+      border-color var(--dur-fast) var(--ease);
+  }
+
+  .back-link:hover {
+    color: var(--color-text);
+    border-color: var(--color-accent);
+  }
+</style>
