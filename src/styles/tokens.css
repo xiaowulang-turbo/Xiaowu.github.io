@@ -1,0 +1,220 @@
+/*
+ * tokens.css — Design Tokens (Single Source of Truth in CSS)
+ *
+ * 与 docs/design/DESIGN_TOKENS.md 保持完全一致。
+ * 修改前请先更新 DESIGN_TOKENS.md 并经 RFC 论证。
+ *
+ * Tailwind v4 通过 @theme 自动派生工具类（bg-bg, text-text-muted, rounded-md, p-6 等）。
+ */
+
+@import "tailwindcss";
+
+@theme {
+  /* ============================================================
+   * 颜色 / Colors — Light Mode（默认）
+   * ============================================================ */
+  --color-bg: #ffffff;
+  --color-bg-subtle: #fafafa;
+  --color-bg-muted: #f4f4f5;
+
+  --color-border: #e4e4e7;
+  --color-border-strong: #d4d4d8;
+
+  --color-text: #18181b;
+  --color-text-muted: #52525b;
+  --color-text-subtle: #a1a1aa;
+
+  /* —— Accent: 克制蓝 —— */
+  --color-accent: #2563eb;
+  --color-accent-hover: #1d4ed8;
+  --color-accent-soft: #dbeafe;
+  --color-accent-fg: #ffffff;
+
+  /* —— 状态色（仅必要语义，不作装饰） —— */
+  --color-success: #16a34a;
+  --color-warning: #ca8a04;
+  --color-danger: #dc2626;
+
+  /* ============================================================
+   * 圆角 / Radius
+   * ============================================================ */
+  --radius-sm: 4px;
+  --radius: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-full: 9999px;
+
+  /* ============================================================
+   * 间距 / Spacing — 4px grid（Tailwind v4 默认 spacing 单位为 0.25rem，
+   * 我们额外暴露语义化变量给非 Tailwind 场景使用）
+   * ============================================================ */
+  --space-0: 0;
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.25rem;
+  --space-6: 1.5rem;
+  --space-8: 2rem;
+  --space-10: 2.5rem;
+  --space-12: 3rem;
+  --space-16: 4rem;
+  --space-20: 5rem;
+  --space-24: 6rem;
+  --space-32: 8rem;
+
+  /* ============================================================
+   * 容器宽度 / Containers
+   * ============================================================ */
+  --container-max: 1200px;
+  --prose-max: 680px;
+  --hero-max: 960px;
+
+  /* ============================================================
+   * 字体栈 / Font Stacks
+   * ============================================================ */
+  --font-sans: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+    "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+  --font-serif: ui-serif, Georgia, Cambria, "Times New Roman", "Source Han Serif SC",
+    "Noto Serif CJK SC", serif;
+  --font-mono: ui-monospace, "JetBrains Mono", "Fira Code", "SF Mono", Menlo, Consolas, monospace;
+
+  /* ============================================================
+   * 字号 / Type Scale
+   * ============================================================ */
+  --text-h1: clamp(2.25rem, 4vw, 3rem);
+  --text-h2: clamp(1.75rem, 3vw, 2.25rem);
+  --text-h3: 1.5rem;
+  --text-h4: 1.25rem;
+  --text-body: 1rem;
+  --text-small: 0.875rem;
+  --text-caption: 0.8125rem;
+  --text-code: 0.9375rem;
+
+  /* ============================================================
+   * 字重 / Font Weights
+   * ============================================================ */
+  --font-weight-normal: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+
+  /* ============================================================
+   * 行高 / 字距
+   * ============================================================ */
+  --leading-tight: 1.2;
+  --leading-snug: 1.4;
+  --leading-normal: 1.6;
+  --leading-relaxed: 1.7;
+  --leading-loose: 1.85;
+
+  --tracking-tight: -0.02em;
+  --tracking-snug: -0.01em;
+  --tracking-normal: 0;
+  --tracking-wide: 0.02em;
+
+  /* ============================================================
+   * 阴影 / Shadow（仅悬浮/激活/聚焦使用）
+   * ============================================================ */
+  --shadow-sm: 0 1px 2px rgb(0 0 0 / 0.04);
+  --shadow: 0 1px 3px rgb(0 0 0 / 0.04), 0 4px 12px rgb(0 0 0 / 0.04);
+  --shadow-md: 0 4px 16px rgb(0 0 0 / 0.06), 0 12px 32px rgb(0 0 0 / 0.04);
+
+  /* ============================================================
+   * 动效 / Motion
+   * ============================================================ */
+  --ease: cubic-bezier(0.2, 0.8, 0.2, 1);
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+
+  --dur-instant: 0ms;
+  --dur-fast: 150ms;
+  --dur-normal: 200ms;
+  --dur-slow: 300ms;
+
+  /* ============================================================
+   * Z-index 层级
+   * ============================================================ */
+  --z-base: 0;
+  --z-dropdown: 10;
+  --z-sticky: 20;
+  --z-overlay: 30;
+  --z-modal: 40;
+  --z-toast: 50;
+  --z-tooltip: 60;
+}
+
+/* ============================================================
+ * 暗色模式 / Dark Mode
+ * 通过 [data-theme="dark"] 显式声明（由 ThemeToggle 控制）
+ * ============================================================ */
+:root[data-theme="dark"] {
+  --color-bg: #0a0a0a;
+  --color-bg-subtle: #111113;
+  --color-bg-muted: #1a1a1d;
+
+  --color-border: #27272a;
+  --color-border-strong: #3f3f46;
+
+  --color-text: #fafafa;
+  --color-text-muted: #a1a1aa;
+  --color-text-subtle: #71717a;
+
+  --color-accent: #60a5fa;
+  --color-accent-hover: #93c5fd;
+  --color-accent-soft: rgb(30 58 138 / 0.25);
+  --color-accent-fg: #0a0a0a;
+
+  --color-success: #4ade80;
+  --color-warning: #facc15;
+  --color-danger: #f87171;
+
+  /* 暗色下阴影几乎不可见，依赖边线区分层次 */
+  --shadow-sm: 0 1px 2px rgb(0 0 0 / 0.4);
+  --shadow: 0 1px 3px rgb(0 0 0 / 0.4), 0 4px 12px rgb(0 0 0 / 0.3);
+  --shadow-md: 0 4px 16px rgb(0 0 0 / 0.5), 0 12px 32px rgb(0 0 0 / 0.4);
+}
+
+/* ============================================================
+ * 系统跟随（用户未手动选择主题时）
+ * ============================================================ */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme]) {
+    --color-bg: #0a0a0a;
+    --color-bg-subtle: #111113;
+    --color-bg-muted: #1a1a1d;
+
+    --color-border: #27272a;
+    --color-border-strong: #3f3f46;
+
+    --color-text: #fafafa;
+    --color-text-muted: #a1a1aa;
+    --color-text-subtle: #71717a;
+
+    --color-accent: #60a5fa;
+    --color-accent-hover: #93c5fd;
+    --color-accent-soft: rgb(30 58 138 / 0.25);
+    --color-accent-fg: #0a0a0a;
+
+    --color-success: #4ade80;
+    --color-warning: #facc15;
+    --color-danger: #f87171;
+
+    --shadow-sm: 0 1px 2px rgb(0 0 0 / 0.4);
+    --shadow: 0 1px 3px rgb(0 0 0 / 0.4), 0 4px 12px rgb(0 0 0 / 0.3);
+    --shadow-md: 0 4px 16px rgb(0 0 0 / 0.5), 0 12px 32px rgb(0 0 0 / 0.4);
+  }
+}
+
+/* ============================================================
+ * 用户偏好：减少动效
+ * ============================================================ */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

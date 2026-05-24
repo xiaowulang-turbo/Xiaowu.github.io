@@ -1,0 +1,178 @@
+/*
+ * globals.css — 全局基础样式
+ * 仅包含 reset + 基础排版 + 主题过渡。组件样式不进此文件。
+ */
+
+/* ============================================================
+ * 平滑滚动 + 字号继承用户/系统偏好
+ * ============================================================ */
+html {
+  scroll-behavior: smooth;
+  text-size-adjust: 100%;
+  -webkit-text-size-adjust: 100%;
+  /* 让浏览器知道当前主题，影响表单控件等原生 UI */
+  color-scheme: light dark;
+}
+
+html[data-theme="light"] {
+  color-scheme: light;
+}
+
+html[data-theme="dark"] {
+  color-scheme: dark;
+}
+
+/* ============================================================
+ * Body — 主背景与正文
+ *
+ * 使用 CSS Grid 实现优雅 sticky footer：
+ * - 内容不足一屏：footer 自动贴底
+ * - 内容超过一屏：footer 自然在内容末尾
+ * - 无需 JS、无需 fixed 定位
+ * ============================================================ */
+body {
+  margin: 0;
+  min-height: 100vh;
+  min-height: 100dvh;
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  font-family: var(--font-sans);
+  font-size: var(--text-body);
+  line-height: var(--leading-relaxed);
+  font-weight: var(--font-weight-normal);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+
+  /* 主题切换时的颜色过渡（克制 200ms） */
+  transition: background-color var(--dur-normal) var(--ease), color var(--dur-normal) var(--ease);
+}
+
+/* ============================================================
+ * 选区
+ * ============================================================ */
+::selection {
+  background-color: var(--color-accent-soft);
+  color: var(--color-text);
+}
+
+/* ============================================================
+ * 标题层级
+ * ============================================================ */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  margin: 0;
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text);
+}
+
+h1 {
+  font-size: var(--text-h1);
+  line-height: var(--leading-tight);
+  letter-spacing: var(--tracking-tight);
+}
+
+h2 {
+  font-size: var(--text-h2);
+  line-height: var(--leading-snug);
+  letter-spacing: var(--tracking-snug);
+}
+
+h3 {
+  font-size: var(--text-h3);
+  line-height: var(--leading-snug);
+}
+
+h4 {
+  font-size: var(--text-h4);
+  line-height: var(--leading-snug);
+}
+
+/* ============================================================
+ * 段落与文本
+ * ============================================================ */
+p {
+  margin: 0;
+}
+
+small {
+  font-size: var(--text-small);
+}
+
+/* ============================================================
+ * 链接
+ * ============================================================ */
+a {
+  color: inherit;
+  text-decoration: none;
+  transition: color var(--dur-fast) var(--ease);
+}
+
+/* ============================================================
+ * 代码
+ * ============================================================ */
+code,
+kbd,
+pre,
+samp {
+  font-family: var(--font-mono);
+  font-size: var(--text-code);
+}
+
+code {
+  background-color: var(--color-bg-muted);
+  padding: 0.1em 0.35em;
+  border-radius: var(--radius-sm);
+}
+
+/* ============================================================
+ * 焦点环（统一规范，禁止 outline:none 而无替代）
+ * ============================================================ */
+:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+  border-radius: var(--radius-sm);
+}
+
+/* ============================================================
+ * 通用容器（语义类，组件中可复用）
+ * ============================================================ */
+.container {
+  width: 100%;
+  max-width: var(--container-max);
+  margin-inline: auto;
+  padding-inline: var(--space-6);
+}
+
+@media (min-width: 768px) {
+  .container {
+    padding-inline: var(--space-8);
+  }
+}
+
+/* ============================================================
+ * 跳转到主内容（无障碍）
+ * ============================================================ */
+.skip-link {
+  position: absolute;
+  top: -40px;
+  left: var(--space-4);
+  z-index: var(--z-tooltip);
+  padding: var(--space-2) var(--space-4);
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--radius);
+  font-size: var(--text-small);
+  transition: top var(--dur-fast) var(--ease);
+}
+
+.skip-link:focus-visible {
+  top: var(--space-4);
+}
