@@ -1,7 +1,8 @@
 allowBuilds:
-  '@biomejs/biome': set this to true or false
-  esbuild: set this to true or false
-  sharp: set this to true or false
+  '@biomejs/biome': true
+  esbuild: true
+  sharp: true
+
 # pnpm 配置（pnpm 11+ 全局配置项的新家）
 # 即使是单仓也使用本文件，参考 https://pnpm.io/settings
 
