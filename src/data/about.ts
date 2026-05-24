@@ -99,7 +99,7 @@ const aboutData = {
     aka: "Kirito",
     akaTease: "— from a sword-and-magic story.",
     /* [DRAFT] 主线 lead 句，可改 */
-    tagline: "从初级前端走向全栈 Agent 工程师。一条还在加速的曲线。",
+    tagline: "从初级前端走向全栈 Agent 工程师。",
     intent: ["Agent", "全栈", "前端"],
     /* [DRAFT] 求职意向元信息 */
     meta: "Open to opportunities",

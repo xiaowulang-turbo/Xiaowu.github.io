@@ -65,7 +65,7 @@ export const zh = {
   "about.openTo": "Open to opportunities",
 
   "about.trajectory.title": "Trajectory",
-  "about.trajectory.subtitle": "一条还在加速的曲线。",
+  "about.trajectory.subtitle": "",
 
   "about.now.title": "What I'm working on",
   "about.now.keywords": "关键能力",

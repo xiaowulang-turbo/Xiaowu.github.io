@@ -21,7 +21,7 @@ const lastIndex = items.length - 1;
   <div class="container traj-inner">
     <header class="head">
       <h2 class="title">{t("about.trajectory.title")}</h2>
-      <p class="subtitle">{t("about.trajectory.subtitle")}</p>
+      {t("about.trajectory.subtitle") && <p class="subtitle">{t("about.trajectory.subtitle")}</p>}
     </header>
 
     <ol class="line" role="list">
