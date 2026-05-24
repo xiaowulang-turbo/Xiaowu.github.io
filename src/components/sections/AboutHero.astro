@@ -1,0 +1,180 @@
+---
+/**
+ * AboutHero.astro — M1 Hero
+ *
+ * 第一屏独占。结构：
+ *   eyebrow（自更新时间） + display（Xiaowu）
+ *   + caption（Kirito + hover 彩蛋）+ lead（主线一句话）
+ *   + meta（求职意向）+ keep-reading 暗示
+ *
+ * Kirito 彩蛋：纯 CSS，hover/focus 时通过 data-tease 显示追加文本。
+ * 移动端不触发（无 hover），保持 caption 简洁。
+ */
+import { ABOUT } from "@data/about";
+import { t } from "@i18n/index";
+
+const { signature, lastUpdated } = ABOUT;
+
+/* 格式化为 "May 24, 2026" 风格 */
+const formattedDate = lastUpdated.toLocaleDateString("en-US", {
+  year: "numeric",
+  month: "long",
+  day: "numeric",
+});
+---
+
+<section class="hero">
+  <div class="container hero-inner">
+    <p class="eyebrow">
+      <span>{t("about.lastUpdated")}</span>
+      <span class="sep" aria-hidden="true">·</span>
+      <span>{formattedDate}</span>
+    </p>
+
+    <h1 class="display">{signature.name}</h1>
+
+    {
+      signature.aka && (
+        <p class="aka">
+          also known as
+          <span
+            class="aka-name"
+            data-tease={signature.akaTease ?? ""}
+            tabindex="0"
+          >
+            {signature.aka}
+          </span>
+          in the cyberspace.
+        </p>
+      )
+    }
+
+    <p class="lead">{signature.tagline}</p>
+
+    <p class="meta">
+      {signature.intent.join(" · ")}
+      {
+        signature.meta && (
+          <>
+            <span class="sep" aria-hidden="true">·</span>
+            <span class="meta-text">{signature.meta}</span>
+          </>
+        )
+      }
+    </p>
+
+    <a class="keep-reading" href="#trajectory">
+      <span>↓</span>
+      <span>{t("about.keepReading")}</span>
+    </a>
+  </div>
+</section>
+
+<style>
+  .hero {
+    min-height: 100svh;
+    padding-block: clamp(8rem, 18vh, 14rem) var(--space-16);
+    display: flex;
+    align-items: flex-start;
+  }
+
+  .hero-inner {
+    max-width: var(--prose-max);
+    width: 100%;
+  }
+
+  .eyebrow {
+    margin: 0 0 var(--space-12);
+    color: var(--color-text-subtle);
+    font-family: var(--font-mono);
+    font-size: var(--text-caption);
+    letter-spacing: var(--tracking-wide);
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+  }
+
+  .sep {
+    color: var(--color-text-subtle);
+  }
+
+  .display {
+    margin: 0 0 var(--space-3);
+    font-size: clamp(3rem, 8vw, 6.5rem);
+    font-weight: var(--font-weight-semibold);
+    line-height: 1.05;
+    letter-spacing: var(--tracking-tight);
+    color: var(--color-text);
+  }
+
+  .aka {
+    margin: 0 0 var(--space-12);
+    color: var(--color-text-subtle);
+    font-size: var(--text-caption);
+    letter-spacing: var(--tracking-snug);
+  }
+
+  .aka-name {
+    color: var(--color-text-muted);
+    font-style: italic;
+    cursor: help;
+    position: relative;
+  }
+
+  /* —— Kirito 彩蛋：hover 时追加 data-tease 内容 —— */
+  .aka-name::after {
+    content: " " attr(data-tease);
+    color: var(--color-text-subtle);
+    opacity: 0;
+    transition: opacity var(--dur-normal) var(--ease);
+  }
+
+  @media (hover: hover) {
+    .aka-name:hover::after,
+    .aka-name:focus-visible::after {
+      opacity: 1;
+    }
+  }
+
+  .lead {
+    margin: 0 0 var(--space-12);
+    max-width: 38ch;
+    font-size: clamp(1.125rem, 1.6vw, 1.375rem);
+    color: var(--color-text);
+    line-height: var(--leading-relaxed);
+  }
+
+  .meta {
+    margin: 0 0 var(--space-16);
+    color: var(--color-text-muted);
+    font-size: var(--text-small);
+    display: inline-flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+    align-items: baseline;
+  }
+
+  .meta-text {
+    color: var(--color-text-subtle);
+  }
+
+  .keep-reading {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    color: var(--color-text-subtle);
+    font-size: var(--text-caption);
+    letter-spacing: var(--tracking-wide);
+    transition: color var(--dur-fast) var(--ease);
+  }
+
+  .keep-reading:hover {
+    color: var(--color-text);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .aka-name::after {
+      transition: none;
+    }
+  }
+</style>

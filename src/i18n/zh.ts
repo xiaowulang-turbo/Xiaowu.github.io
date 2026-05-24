@@ -59,6 +59,33 @@ export const zh = {
   "page.about.intro": "我是 Xiaowu，在网络空间里也叫 Kirito。",
   "page.about.placeholder": "这里以后会是一份克制的简历——关于我做过什么、相信什么、想往哪里去。",
 
+  /* —— About 板块（v1.0）—— */
+  "about.lastUpdated": "最近一次自更新",
+  "about.keepReading": "继续阅读",
+  "about.openTo": "Open to opportunities",
+
+  "about.trajectory.title": "Trajectory",
+  "about.trajectory.subtitle": "一条还在加速的曲线。",
+
+  "about.now.title": "What I'm working on",
+  "about.now.keywords": "关键能力",
+
+  "about.track.title": "Track Record",
+  "about.track.intern": "Intern",
+
+  "about.stack.title": "Stack",
+  "about.stack.agentAndAi": "Agent & AI",
+  "about.stack.daily": "Daily driver",
+  "about.stack.comfortable": "Comfortable",
+  "about.stack.curious": "Curious about",
+
+  "about.education.title": "Education",
+
+  "about.asked.title": "Three things I'd love to be asked",
+  "about.asked.placeholderHint": "Three thoughtful questions are taking shape.",
+
+  "about.wantMore.title": "Want more?",
+
   "page.projects.title": "项目",
   "page.projects.placeholder": "这里以后会陈列我在 GitHub 上认真做过、愿意拿出来分享的项目。",
 

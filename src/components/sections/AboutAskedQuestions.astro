@@ -1,0 +1,92 @@
+---
+/**
+ * AboutAskedQuestions.astro — M7 Three Things I'd Love to Be Asked
+ *
+ * v1.0 占位策略：
+ *   - 字段值含 "{{TODO}}" 时，整体渲染为「优雅留白」状态
+ *     仅显示 placeholderHint，不暴露占位字符
+ *   - 当全部 3 条均不含 "{{TODO}}" 时，正式渲染编号 + 问题
+ */
+import { ABOUT } from "@data/about";
+import { t } from "@i18n/index";
+
+const questions = ABOUT.questionsToBeAsked;
+const allReady = questions.every((q) => !q.includes("{{TODO}}"));
+---
+
+<section class="asked" data-reveal>
+  <div class="container asked-inner">
+    <h2 class="title">{t("about.asked.title")}</h2>
+
+    {
+      allReady ? (
+        <ol class="list">
+          {questions.map((q, i) => (
+            <li class="item">
+              <span class="num" aria-hidden="true">
+                {String(i + 1).padStart(2, "0")}
+              </span>
+              <p class="question">{q}</p>
+            </li>
+          ))}
+        </ol>
+      ) : (
+        <p class="hint">{t("about.asked.placeholderHint")}</p>
+      )
+    }
+  </div>
+</section>
+
+<style>
+  .asked {
+    padding-block: var(--space-24);
+  }
+
+  .asked-inner {
+    max-width: var(--prose-max);
+  }
+
+  .title {
+    margin: 0 0 var(--space-12);
+    font-size: var(--text-h3);
+    color: var(--color-text);
+    letter-spacing: var(--tracking-snug);
+  }
+
+  .list {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-8);
+  }
+
+  .item {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: var(--space-6);
+    align-items: baseline;
+  }
+
+  .num {
+    font-family: var(--font-mono);
+    font-size: var(--text-h4);
+    font-weight: var(--font-weight-semibold);
+    color: var(--color-accent);
+    line-height: 1;
+  }
+
+  .question {
+    margin: 0;
+    color: var(--color-text);
+    line-height: var(--leading-relaxed);
+  }
+
+  .hint {
+    margin: 0;
+    color: var(--color-text-subtle);
+    font-style: italic;
+    line-height: var(--leading-relaxed);
+  }
+</style>

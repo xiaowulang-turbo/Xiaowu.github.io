@@ -1,0 +1,274 @@
+---
+/**
+ * AboutTrajectory.astro — M2 Trajectory
+ *
+ * 4 节点成长曲线。
+ *   - 桌面 ≥768px：水平等分，1px 主线 + 8px 圆点
+ *   - 移动 <768px：竖向，1px 竖线 + 8px 圆点
+ *
+ * 节点交互：hover/focus 时展开 .hover 字段（200ms grid-row 过渡）。
+ * highlight=true 的节点用强调色填充 + 描边外圈。
+ * 最后一个节点（current）额外加极轻呼吸动画。
+ */
+import { ABOUT } from "@data/about";
+import { t } from "@i18n/index";
+
+const items = ABOUT.trajectory;
+const lastIndex = items.length - 1;
+---
+
+<section class="traj" data-reveal>
+  <div class="container traj-inner">
+    <header class="head">
+      <h2 class="title">{t("about.trajectory.title")}</h2>
+      <p class="subtitle">{t("about.trajectory.subtitle")}</p>
+    </header>
+
+    <ol class="line" role="list">
+      {
+        items.map((it, i) => (
+          <li
+            class:list={[
+              "node",
+              { "is-highlight": it.highlight, "is-current": i === lastIndex },
+            ]}
+            tabindex="0"
+          >
+            <div class="date">{it.date}</div>
+            <div class="dot" aria-hidden="true" />
+            <div class="meta">
+              <p class="org-role">
+                {it.org}
+                <span class="role"> · {it.role === "Intern" ? "实习" : "正职"}</span>
+              </p>
+              <p class="label">{it.label}</p>
+              {it.hover && <p class="hover">{it.hover}</p>}
+            </div>
+          </li>
+        ))
+      }
+    </ol>
+  </div>
+</section>
+
+<style>
+  .traj {
+    padding-block: var(--space-24);
+  }
+
+  .traj-inner {
+    max-width: var(--container-max);
+  }
+
+  .head {
+    margin-bottom: var(--space-16);
+  }
+
+  .title {
+    margin: 0 0 var(--space-2);
+    font-size: var(--text-h3);
+    color: var(--color-text);
+    letter-spacing: var(--tracking-snug);
+  }
+
+  .subtitle {
+    margin: 0;
+    color: var(--color-text-subtle);
+    font-size: var(--text-small);
+    font-style: italic;
+  }
+
+  /* 主线（伪元素） */
+  .line {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    position: relative;
+    display: grid;
+    gap: var(--space-12);
+  }
+
+  .node {
+    cursor: default;
+  }
+
+  /* —— 桌面：水平 —— */
+  @media (min-width: 768px) {
+    .line {
+      grid-template-columns: repeat(4, 1fr);
+      gap: var(--space-8);
+    }
+
+    .line::before {
+      content: "";
+      position: absolute;
+      top: calc(var(--space-6) + 4px);
+      left: calc(100% / 8);
+      right: calc(100% / 8);
+      height: 1px;
+      background: var(--color-border-strong);
+      pointer-events: none;
+    }
+
+    .node {
+      display: grid;
+      grid-template-rows: auto 12px auto;
+      justify-items: center;
+      text-align: center;
+      gap: var(--space-2);
+    }
+
+    .date {
+      order: 1;
+    }
+    .dot {
+      order: 2;
+    }
+    .meta {
+      order: 3;
+    }
+  }
+
+  /* —— 移动：竖向 —— */
+  @media (max-width: 767.98px) {
+    .line::before {
+      content: "";
+      position: absolute;
+      top: var(--space-3);
+      bottom: var(--space-3);
+      left: 5px;
+      width: 1px;
+      background: var(--color-border-strong);
+      pointer-events: none;
+    }
+
+    .node {
+      display: grid;
+      grid-template-columns: 12px 1fr;
+      column-gap: var(--space-4);
+      row-gap: var(--space-1);
+      align-items: baseline;
+    }
+
+    .date {
+      grid-column: 2;
+      order: 1;
+    }
+    .dot {
+      grid-column: 1;
+      grid-row: 1 / span 4;
+      align-self: start;
+      margin-top: var(--space-1);
+    }
+    .meta {
+      grid-column: 2;
+      order: 2;
+    }
+  }
+
+  /* —— 圆点 —— */
+  .dot {
+    width: 8px;
+    height: 8px;
+    border-radius: var(--radius-full);
+    background: var(--color-text-muted);
+    transition: background-color var(--dur-fast) var(--ease);
+  }
+
+  .node.is-highlight .dot {
+    background: var(--color-accent);
+    box-shadow: 0 0 0 2px var(--color-bg), 0 0 0 3px var(--color-accent);
+  }
+
+  .node.is-current .dot {
+    animation: pulse 2.4s ease-in-out infinite;
+  }
+
+  @keyframes pulse {
+    0%,
+    100% {
+      box-shadow: 0 0 0 2px var(--color-bg), 0 0 0 3px var(--color-accent);
+    }
+    50% {
+      box-shadow:
+        0 0 0 2px var(--color-bg),
+        0 0 0 3px var(--color-accent),
+        0 0 0 8px color-mix(in srgb, var(--color-accent) 18%, transparent);
+    }
+  }
+
+  /* —— 文本 —— */
+  .date {
+    font-family: var(--font-mono);
+    font-size: var(--text-caption);
+    color: var(--color-text-subtle);
+    line-height: 1;
+  }
+
+  .meta {
+    display: grid;
+    grid-template-rows: auto auto 0fr;
+    transition: grid-template-rows var(--dur-normal) var(--ease);
+  }
+
+  .org-role {
+    margin: 0;
+    font-size: var(--text-small);
+    color: var(--color-text);
+    font-weight: var(--font-weight-semibold);
+    line-height: var(--leading-snug);
+  }
+
+  .role {
+    color: var(--color-text-subtle);
+    font-weight: var(--font-weight-normal);
+  }
+
+  .label {
+    margin: var(--space-1) 0 0;
+    font-size: var(--text-small);
+    color: var(--color-text-muted);
+    line-height: var(--leading-snug);
+  }
+
+  .hover {
+    margin: 0;
+    overflow: hidden;
+    color: var(--color-text-subtle);
+    font-size: var(--text-caption);
+    line-height: var(--leading-snug);
+    transition: padding-top var(--dur-normal) var(--ease);
+  }
+
+  .node:hover .meta,
+  .node:focus-visible .meta {
+    grid-template-rows: auto auto 1fr;
+  }
+
+  .node:hover .hover,
+  .node:focus-visible .hover {
+    padding-top: var(--space-2);
+  }
+
+  /* 减弱动效 */
+  @media (prefers-reduced-motion: reduce) {
+    .node.is-current .dot {
+      animation: none;
+    }
+    .meta {
+      transition: none;
+    }
+    .hover {
+      transition: none;
+    }
+  }
+
+  /* 焦点环 */
+  .node:focus-visible {
+    outline: none;
+  }
+  .node:focus-visible .dot {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 4px;
+  }
+</style>

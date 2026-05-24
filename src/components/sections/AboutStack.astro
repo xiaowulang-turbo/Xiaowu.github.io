@@ -1,0 +1,120 @@
+---
+/**
+ * AboutStack.astro — M5 Stack
+ *
+ * 四列技能栈。第一列 Agent & AI 是差异化锚点：
+ *   - 列标题用 var(--color-accent)（全 Stack 唯一着色处）
+ *   - 其他三列保持中性色
+ *
+ * 响应式：4 列（≥1024）/ 2 列（≥640）/ 1 列（<640）
+ */
+import { ABOUT } from "@data/about";
+import { t } from "@i18n/index";
+
+const columns = [
+  {
+    label: t("about.stack.agentAndAi"),
+    items: ABOUT.stack.agentAndAi,
+    accent: true,
+  },
+  {
+    label: t("about.stack.daily"),
+    items: ABOUT.stack.daily,
+    accent: false,
+  },
+  {
+    label: t("about.stack.comfortable"),
+    items: ABOUT.stack.comfortable,
+    accent: false,
+  },
+  {
+    label: t("about.stack.curious"),
+    items: ABOUT.stack.curious,
+    accent: false,
+  },
+];
+---
+
+<section class="stack" data-reveal>
+  <div class="container stack-inner">
+    <h2 class="title">{t("about.stack.title")}</h2>
+
+    <div class="grid">
+      {
+        columns.map((col) => (
+          <div class="col">
+            <h3 class:list={["col-title", { accent: col.accent }]}>{col.label}</h3>
+            <ul class="col-list">
+              {col.items.map((item) => (
+                <li class="col-item">{item}</li>
+              ))}
+            </ul>
+          </div>
+        ))
+      }
+    </div>
+  </div>
+</section>
+
+<style>
+  .stack {
+    padding-block: var(--space-24);
+  }
+
+  .stack-inner {
+    max-width: var(--container-max);
+  }
+
+  .title {
+    margin: 0 0 var(--space-12);
+    font-size: var(--text-h3);
+    color: var(--color-text);
+    letter-spacing: var(--tracking-snug);
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-10) var(--space-8);
+  }
+
+  @media (min-width: 640px) {
+    .grid {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .grid {
+      grid-template-columns: repeat(4, 1fr);
+    }
+  }
+
+  .col-title {
+    margin: 0 0 var(--space-4);
+    font-size: var(--text-caption);
+    font-weight: var(--font-weight-medium);
+    color: var(--color-text-subtle);
+    text-transform: uppercase;
+    letter-spacing: var(--tracking-wide);
+  }
+
+  .col-title.accent {
+    color: var(--color-accent);
+  }
+
+  .col-list {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+  }
+
+  .col-item {
+    color: var(--color-text);
+    font-size: var(--text-small);
+    line-height: var(--leading-snug);
+  }
+</style>

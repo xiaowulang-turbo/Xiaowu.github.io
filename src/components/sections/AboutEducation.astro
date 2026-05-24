@@ -1,0 +1,97 @@
+---
+/**
+ * AboutEducation.astro — M6 Education
+ *
+ * 极简学历区。布局与 Track Record 一致（双列日期-内容）。
+ * v1.0 不渲染 notes 字段（按 RFC-0002 §5.M6）。
+ */
+import { ABOUT } from "@data/about";
+import { t } from "@i18n/index";
+---
+
+<section class="education" data-reveal>
+  <div class="container edu-inner">
+    <h2 class="title">{t("about.education.title")}</h2>
+
+    <ul class="list">
+      {
+        ABOUT.education.map((edu) => (
+          <li class="item">
+            <div class="period">{edu.period}</div>
+            <div class="body">
+              <p class="school">{edu.school}</p>
+              <p class="meta">
+                {edu.major} · {edu.degree}
+              </p>
+            </div>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</section>
+
+<style>
+  .education {
+    padding-block: var(--space-24);
+  }
+
+  .edu-inner {
+    max-width: var(--container-max);
+  }
+
+  .title {
+    margin: 0 0 var(--space-12);
+    font-size: var(--text-h3);
+    color: var(--color-text);
+    letter-spacing: var(--tracking-snug);
+  }
+
+  .list {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-8);
+  }
+
+  .item {
+    display: grid;
+    grid-template-columns: clamp(140px, 18%, 200px) 1fr;
+    gap: var(--space-6);
+    align-items: baseline;
+  }
+
+  .period {
+    font-family: var(--font-mono);
+    font-size: var(--text-small);
+    color: var(--color-text-subtle);
+  }
+
+  .body {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1);
+  }
+
+  .school {
+    margin: 0;
+    color: var(--color-text);
+    font-weight: var(--font-weight-semibold);
+  }
+
+  .meta {
+    margin: 0;
+    color: var(--color-text-muted);
+    font-size: var(--text-small);
+  }
+
+  /* 移动端：纵向堆叠 */
+  @media (max-width: 640px) {
+    .item {
+      grid-template-columns: 1fr;
+      gap: var(--space-2);
+    }
+  }
+</style>

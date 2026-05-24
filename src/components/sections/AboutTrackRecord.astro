@@ -1,0 +1,114 @@
+---
+/**
+ * AboutTrackRecord.astro — M4 Track Record
+ *
+ * 反时间线工作 / 实习经历。
+ * 实习与正职用同一视觉单元，仅在公司名后追加 "· Intern" 区分。
+ * 已按 RFC-0002 §5.M4 + 取舍原则精简：删除 Vben 与 Renren 段。
+ */
+import { ABOUT } from "@data/about";
+import { t } from "@i18n/index";
+---
+
+<section class="track" data-reveal>
+  <div class="container track-inner">
+    <h2 class="title">{t("about.track.title")}</h2>
+
+    <ol class="list">
+      {
+        ABOUT.experiences.map((exp) => (
+          <li class="item">
+            <div class="period">{exp.period}</div>
+            <div class="body">
+              <p class="org-line">
+                <span class="org">{exp.org}</span>
+                {exp.role === "Intern" && (
+                  <span class="role"> · {t("about.track.intern")}</span>
+                )}
+                <span class="title-text"> · {exp.title}</span>
+              </p>
+              {exp.bullets.map((b) => (
+                <p class="bullet">{b}</p>
+              ))}
+            </div>
+          </li>
+        ))
+      }
+    </ol>
+  </div>
+</section>
+
+<style>
+  .track {
+    padding-block: var(--space-24);
+  }
+
+  .track-inner {
+    max-width: var(--container-max);
+  }
+
+  .title {
+    margin: 0 0 var(--space-12);
+    font-size: var(--text-h3);
+    color: var(--color-text);
+    letter-spacing: var(--tracking-snug);
+  }
+
+  .list {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-10);
+  }
+
+  .item {
+    display: grid;
+    grid-template-columns: clamp(140px, 18%, 200px) 1fr;
+    gap: var(--space-6);
+    align-items: baseline;
+  }
+
+  .period {
+    font-family: var(--font-mono);
+    font-size: var(--text-small);
+    color: var(--color-text-subtle);
+  }
+
+  .body {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+  }
+
+  .org-line {
+    margin: 0;
+    line-height: var(--leading-snug);
+  }
+
+  .org {
+    color: var(--color-text);
+    font-weight: var(--font-weight-semibold);
+  }
+
+  .role,
+  .title-text {
+    color: var(--color-text-subtle);
+    font-size: var(--text-small);
+  }
+
+  .bullet {
+    margin: 0;
+    color: var(--color-text-muted);
+    font-size: var(--text-small);
+    line-height: var(--leading-relaxed);
+  }
+
+  @media (max-width: 640px) {
+    .item {
+      grid-template-columns: 1fr;
+      gap: var(--space-2);
+    }
+  }
+</style>

@@ -1,0 +1,166 @@
+---
+/**
+ * AboutNow.astro — M3 What I'm working on
+ *
+ * 两张并列项目卡（≥1024px）/ 上下堆叠（<1024px）。
+ * 项目卡内包含：title / org · role / period / summary / keywords / tagline?
+ * 1px 边线，无阴影，hover 仅边线变深。
+ *
+ * tagline 字段为 undefined 或含 {{TODO}} 时不渲染（v1.0 占位策略）。
+ */
+import { ABOUT } from "@data/about";
+import { t } from "@i18n/index";
+
+const projects = ABOUT.nowProjects;
+
+function shouldRenderTagline(tagline: string | undefined): tagline is string {
+  return typeof tagline === "string" && !tagline.includes("{{TODO}}");
+}
+---
+
+<section class="now" data-reveal>
+  <div class="container now-inner">
+    <h2 class="title">{t("about.now.title")}</h2>
+
+    <div class="grid">
+      {
+        projects.map((p) => (
+          <article class="card">
+            <header class="card-head">
+              <h3 class="card-title">{p.title}</h3>
+              <p class="card-meta">
+                <span>{p.org}</span>
+                {p.role && <span class="role"> · {p.role}</span>}
+                <span class="dot" aria-hidden="true">
+                  ·
+                </span>
+                <span class="period">{p.period}</span>
+              </p>
+            </header>
+
+            <p class="summary">{p.summary}</p>
+
+            <p class="kw-line">
+              <span class="kw-label">{t("about.now.keywords")}</span>
+              <span class="kw-items">{p.keywords.join(" · ")}</span>
+            </p>
+
+            {shouldRenderTagline(p.tagline) && <p class="tagline">{p.tagline}</p>}
+          </article>
+        ))
+      }
+    </div>
+  </div>
+</section>
+
+<style>
+  .now {
+    padding-block: var(--space-24);
+  }
+
+  .now-inner {
+    max-width: var(--container-max);
+  }
+
+  .title {
+    margin: 0 0 var(--space-12);
+    font-size: var(--text-h3);
+    color: var(--color-text);
+    letter-spacing: var(--tracking-snug);
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-6);
+  }
+
+  @media (min-width: 1024px) {
+    .grid {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+
+  .card {
+    padding: var(--space-8);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    transition: border-color var(--dur-normal) var(--ease);
+
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-5);
+  }
+
+  .card:hover {
+    border-color: var(--color-border-strong);
+  }
+
+  .card-head {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+  }
+
+  .card-title {
+    margin: 0;
+    font-size: var(--text-h4);
+    color: var(--color-text);
+    line-height: var(--leading-tight);
+    letter-spacing: var(--tracking-snug);
+  }
+
+  .card-meta {
+    margin: 0;
+    color: var(--color-text-subtle);
+    font-size: var(--text-small);
+    display: inline-flex;
+    flex-wrap: wrap;
+    gap: var(--space-1);
+    align-items: baseline;
+  }
+
+  .role,
+  .period {
+    color: var(--color-text-subtle);
+  }
+
+  .dot {
+    color: var(--color-text-subtle);
+  }
+
+  .summary {
+    margin: 0;
+    color: var(--color-text-muted);
+    line-height: var(--leading-relaxed);
+  }
+
+  .kw-line {
+    margin: 0;
+    font-size: var(--text-small);
+    color: var(--color-text-muted);
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-3);
+    line-height: var(--leading-relaxed);
+  }
+
+  .kw-label {
+    color: var(--color-text-subtle);
+    flex-shrink: 0;
+  }
+
+  .kw-items {
+    flex: 1 1 auto;
+  }
+
+  .tagline {
+    margin: 0;
+    padding-top: var(--space-4);
+    border-top: 1px solid var(--color-border);
+    color: var(--color-text);
+    font-size: var(--text-small);
+    font-style: italic;
+    line-height: var(--leading-relaxed);
+  }
+</style>

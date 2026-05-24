@@ -126,36 +126,11 @@ const thoughts = defineCollection({
 });
 
 /* ============================================================
- * Collection: about（结构化单文档）
- * ============================================================ */
-const about = defineCollection({
-  type: "content",
-  schema: z.object({
-    signature: z.object({
-      name: z.enum(["Xiaowu", "Kirito"]),
-      aka: z.array(z.string()).optional(),
-      tagline: z.string(),
-    }),
-    contact: z.object({
-      email: z.string().email().optional(),
-      github: z.string().url().optional(),
-      other: z
-        .array(
-          z.object({
-            label: z.string(),
-            href: z.string().url(),
-          }),
-        )
-        .optional(),
-    }),
-    sections: z.array(
-      z.object({
-        id: z.string(),
-        title: z.string(),
-      }),
-    ),
-  }),
-});
+ * Note: about（关于页）不是 Content Collection
+ * ============================================================
+ * 它是结构化数据，定义在 src/data/about.ts，由 Zod 加载时校验。
+ * 参考 docs/content/CONTENT_MODEL.md §2.7。
+ */
 
 /* ============================================================
  * 导出
@@ -167,5 +142,4 @@ export const collections = {
   "ai-skills": aiSkills,
   "ai-lab": aiLab,
   thoughts,
-  about,
 };

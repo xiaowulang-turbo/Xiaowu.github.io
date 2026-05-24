@@ -1,0 +1,85 @@
+---
+/**
+ * AboutWantMore.astro — M8 Want More
+ *
+ * 极简列表，1 行 1 项，纯文字 + → 箭头。
+ * 把 About 与全站连起来。
+ */
+import { ABOUT } from "@data/about";
+import { t } from "@i18n/index";
+---
+
+<section class="want-more" data-reveal>
+  <div class="container want-more-inner">
+    <h2 class="title">{t("about.wantMore.title")}</h2>
+    <ul class="list">
+      {
+        ABOUT.wantMore.map((item) => {
+          const isExternal = item.href.startsWith("http") || item.href.startsWith("mailto:");
+          return (
+            <li>
+              <a
+                class="link"
+                href={item.href}
+                {...(isExternal && !item.href.startsWith("mailto:")
+                  ? { target: "_blank", rel: "noopener noreferrer" }
+                  : {})}
+              >
+                <span class="arrow" aria-hidden="true">→</span>
+                <span class="label">{item.label}</span>
+              </a>
+            </li>
+          );
+        })
+      }
+    </ul>
+  </div>
+</section>
+
+<style>
+  .want-more {
+    padding-block: var(--space-24);
+  }
+
+  .want-more-inner {
+    max-width: var(--prose-max);
+  }
+
+  .title {
+    margin: 0 0 var(--space-6);
+    font-size: var(--text-h4);
+    color: var(--color-text);
+  }
+
+  .list {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+  }
+
+  .link {
+    display: inline-flex;
+    align-items: baseline;
+    gap: var(--space-3);
+    color: var(--color-text-muted);
+    font-size: var(--text-body);
+    transition: color var(--dur-fast) var(--ease);
+  }
+
+  .link:hover {
+    color: var(--color-accent);
+  }
+
+  .arrow {
+    color: var(--color-text-subtle);
+    transition: transform var(--dur-fast) var(--ease);
+  }
+
+  .link:hover .arrow {
+    color: var(--color-accent);
+    transform: translateX(2px);
+  }
+</style>

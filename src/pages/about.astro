@@ -1,12 +1,41 @@
 ---
+/**
+ * /about — About Page (v1.0)
+ *
+ * 按 RFC-0002 §4.2 装配 8 个 section：
+ *   M1 Hero → M2 Trajectory → M3 Now → M4 Track Record →
+ *   M5 Stack → M6 Education → M7 Asked Questions → M8 Want More
+ *
+ * 本文件只做"组装"，不写业务逻辑（按 ARCHITECTURE.md §4.2 红线）。
+ */
 import BaseLayout from "@layouts/BaseLayout.astro";
-import PlaceholderPage from "@components/sections/PlaceholderPage.astro";
+import { ABOUT } from "@data/about";
 import { t } from "@i18n/index";
+
+import AboutHero from "@components/sections/AboutHero.astro";
+import AboutTrajectory from "@components/sections/AboutTrajectory.astro";
+import AboutNow from "@components/sections/AboutNow.astro";
+import AboutTrackRecord from "@components/sections/AboutTrackRecord.astro";
+import AboutStack from "@components/sections/AboutStack.astro";
+import AboutEducation from "@components/sections/AboutEducation.astro";
+import AboutAskedQuestions from "@components/sections/AboutAskedQuestions.astro";
+import AboutWantMore from "@components/sections/AboutWantMore.astro";
 ---
 
-<BaseLayout title={t("page.about.title")} description={t("page.about.placeholder")}>
-  <PlaceholderPage
-    title={t("page.about.title")}
-    description={`${t("page.about.intro")} ${t("page.about.placeholder")}`}
-  />
+<BaseLayout
+  title={t("page.about.title")}
+  description={ABOUT.signature.tagline}
+>
+  <AboutHero />
+
+  <div id="trajectory">
+    <AboutTrajectory />
+  </div>
+
+  <AboutNow />
+  <AboutTrackRecord />
+  <AboutStack />
+  <AboutEducation />
+  <AboutAskedQuestions />
+  <AboutWantMore />
 </BaseLayout>
