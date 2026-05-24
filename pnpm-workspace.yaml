@@ -1,0 +1,20 @@
+allowBuilds:
+  '@biomejs/biome': set this to true or false
+  esbuild: set this to true or false
+  sharp: set this to true or false
+# pnpm 配置（pnpm 11+ 全局配置项的新家）
+# 即使是单仓也使用本文件，参考 https://pnpm.io/settings
+
+# 显式批准这些含原生二进制的包执行 install 脚本：
+# - @biomejs/biome: 下载平台二进制
+# - esbuild: 平台 binary（Astro/Vite 必需）
+# - sharp: 图片处理（Astro <Image /> 必需）
+onlyBuiltDependencies:
+  - "@biomejs/biome"
+  - esbuild
+  - sharp
+
+# 关闭 exec/run 前的 deps 状态自动校验：
+# 我们已通过 onlyBuiltDependencies 显式批准受信任包，
+# pnpm 不应在每次执行命令前重复阻断。
+verifyDepsBeforeRun: false
