@@ -226,6 +226,49 @@ pnpm preview      # 本地预览构建产物
 - Node 版本：≥ 20 LTS
 - 环境变量：（暂无）
 
+### 7.1 pnpm 构建脚本批准（避免 ERR_PNPM_IGNORED_BUILDS）
+
+> 这是一条踩过的坑，写在 SoT 里防止反复。
+
+**背景**：pnpm 10+ 出于供应链安全考虑，默认**不再自动执行**依赖包的 install / postinstall 脚本。
+本项目有三个含原生二进制的依赖**必须**执行这些脚本，否则 `pnpm install` 直接以非零退出，
+Vercel 部署会卡在「Installing dependencies」阶段：
+
+| 包 | 用途 | 脚本作用 |
+|---|---|---|
+| `sharp` | Astro `<Image />` 图片处理 | 下载平台二进制 |
+| `esbuild` | Astro / Vite / Tailwind v4 内部 | 平台二进制 |
+| `@biomejs/biome` | 代码规范 | 下载平台二进制 |
+
+**唯一正确的批准方式**（pnpm 11.2.x 实测）：在 `pnpm-workspace.yaml` 中使用 `allowBuilds`（map: `true/false`）：
+
+```yaml
+# pnpm-workspace.yaml
+allowBuilds:
+  '@biomejs/biome': true
+  esbuild: true
+  sharp: true
+```
+
+**避坑清单**（这些写法都会让 Vercel 部署失败）：
+
+- ❌ `package.json` 里的 `pnpm.onlyBuiltDependencies` 字段——pnpm 11+ 已废弃，会被静默忽略并打 WARN。
+- ❌ `pnpm-workspace.yaml` 的 `onlyBuiltDependencies` 数组——虽然能被 `pnpm config list` 读到，
+  但 install 阶段**仍然**抛 `ERR_PNPM_IGNORED_BUILDS`（pnpm 11.2.2 实测）。
+- ❌ 把上面任意一种和 `allowBuilds` 同时写——增加误读概率，单一来源更稳。
+
+**新增需要批准的依赖时**：在 `pnpm-workspace.yaml` 的 `allowBuilds` 中追加一行 `'<pkg>': true`，
+并在本节表格补一行说明用途（一并提交，遵守 §2.3）。
+
+**本地验证**：
+
+```bash
+rm -rf node_modules
+pnpm install --frozen-lockfile
+# 期望看到 sharp / esbuild / biome 的 install/postinstall 真的执行，
+# 且没有 ERR_PNPM_IGNORED_BUILDS。
+```
+
 ---
 
 ## 8. 可扩展性预留

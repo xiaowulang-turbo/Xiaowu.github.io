@@ -1,21 +1,21 @@
+# pnpm 配置（pnpm 11+ 全局配置项的新家）
+# 即使是单仓也使用本文件，参考 https://pnpm.io/settings
+
+# 显式批准这些含原生二进制的包执行 install 脚本（postinstall）：
+# - @biomejs/biome: 下载平台二进制
+# - esbuild: 平台 binary（Astro/Vite 必需）
+# - sharp: 图片处理（Astro <Image /> 必需）
+#
+# ⚠️ 重要：pnpm 11.2.x 上必须使用 allowBuilds（map: true/false）。
+#   onlyBuiltDependencies（数组）虽能被 `pnpm config list` 读到，
+#   但 install 阶段不会真的放行，仍会抛 ERR_PNPM_IGNORED_BUILDS，
+#   导致 Vercel/CI 部署失败。详见 docs/ARCHITECTURE.md「构建/部署」章节。
 allowBuilds:
   '@biomejs/biome': true
   esbuild: true
   sharp: true
 
-# pnpm 配置（pnpm 11+ 全局配置项的新家）
-# 即使是单仓也使用本文件，参考 https://pnpm.io/settings
-
-# 显式批准这些含原生二进制的包执行 install 脚本：
-# - @biomejs/biome: 下载平台二进制
-# - esbuild: 平台 binary（Astro/Vite 必需）
-# - sharp: 图片处理（Astro <Image /> 必需）
-onlyBuiltDependencies:
-  - "@biomejs/biome"
-  - esbuild
-  - sharp
-
 # 关闭 exec/run 前的 deps 状态自动校验：
-# 我们已通过 onlyBuiltDependencies 显式批准受信任包，
+# 我们已通过 allowBuilds 显式批准受信任包，
 # pnpm 不应在每次执行命令前重复阻断。
 verifyDepsBeforeRun: false
