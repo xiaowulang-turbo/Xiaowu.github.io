@@ -62,24 +62,43 @@ const canonical = new URL(Astro.url.pathname, SITE.url).href;
 
     <!--
       主题防闪：必须在 paint 之前同步执行。
-      读取 localStorage["theme"]，若为 light/dark 则立即设置 <html data-theme>。
-      若为 system 或缺省则不设置（CSS 的 prefers-color-scheme 媒体查询接管）。
+      读取 localStorage["theme"]：
+        - light / dark → 立即设置 <html data-theme> 并锁定 color-scheme 为对应值
+        - system / 缺省 / 异常 → 不设置 data-theme（CSS 的 prefers-color-scheme 接管），
+          但仍按系统偏好显式锁定 color-scheme，确保 MPA 切页之间的「过渡空白帧」
+          浏览器使用与终态一致的底色，避免黑/白闪烁。
 
-      同时为 <html> 添加 .js class —— 这是渐进增强标记：
+      同时为 <html> 添加 .js class —— 渐进增强标记：
       仅在 JS 可用时启用 reveal 动画等增强行为；
       JS 失败时所有内容保持完全可见（无障碍）。
     -->
     <script is:inline>
       (() => {
+        const root = document.documentElement;
+        let resolved = "light";
         try {
           const stored = localStorage.getItem("theme");
           if (stored === "light" || stored === "dark") {
-            document.documentElement.setAttribute("data-theme", stored);
+            root.setAttribute("data-theme", stored);
+            resolved = stored;
+          } else {
+            resolved = window.matchMedia("(prefers-color-scheme: dark)").matches
+              ? "dark"
+              : "light";
           }
         } catch (_) {
-          /* localStorage 不可用时静默失败 */
+          /* localStorage 不可用时退化为系统偏好 */
+          try {
+            resolved = window.matchMedia("(prefers-color-scheme: dark)").matches
+              ? "dark"
+              : "light";
+          } catch (__) {
+            /* matchMedia 也不可用时保持 light 兜底 */
+          }
         }
-        document.documentElement.classList.add("js");
+        // 锁定浏览器原生底色，覆盖 MPA 导航的过渡空白帧
+        root.style.colorScheme = resolved;
+        root.classList.add("js");
       })();
     </script>
   </head>

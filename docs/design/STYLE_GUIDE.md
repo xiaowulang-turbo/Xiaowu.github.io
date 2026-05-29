@@ -235,7 +235,7 @@ Code 0.9375rem                     family: var(--font-mono)
 - **Slide-up**: translateY(8px → 0) + fade（200ms，常用于内容入场）
 - **Color transition**: hover/focus 颜色与边框（150ms）
 - **Underline grow**: 链接下划线从 0 → 100%（200ms）
-- **Theme switch**: html 的 `color-scheme` 切换 0ms（避免闪烁），元素颜色 200ms 过渡
+- **Theme switch**: html 的 `color-scheme` 切换 0ms（避免闪烁），元素颜色 200ms 过渡 —— 过渡 **opt-in**：仅在用户点击 ThemeToggle 时由 `theme.ts` 临时给 `<html>` 加 `.theme-changing` 类，250ms 后自动撤销。MPA 切页、SSR 首帧、CSS 异步加载等场景**不**触发渐变（避免被 200ms 误推成视觉闪烁）。
 - **View Transitions API**（未来）：跨路由的细微过渡
 
 ### 5.4 Reveal-on-scroll（页面级入场）

@@ -4,7 +4,13 @@
  */
 
 /* ============================================================
- * 平滑滚动 + 字号继承用户/系统偏好
+ * 根元素 — 持有终态底色 + 原生主题锁
+ *
+ * 关键：<html> 必须显式持有 background-color / color。
+ * 原因：MPA 切页过渡帧、dev 模式下 vite CSS 异步注入、SSR 首帧等
+ * 任何"body 还未拿到 token 颜色"的窗口期，浏览器都会以 <html>
+ * 的底色填充视口。若 html 透明，就会露出 UA 默认色 → 闪烁。
+ * 见 docs/rfcs/0003-theme-flash-fix.md（如未来归档）。
  * ============================================================ */
 html {
   scroll-behavior: smooth;
@@ -12,6 +18,9 @@ html {
   -webkit-text-size-adjust: 100%;
   /* 让浏览器知道当前主题，影响表单控件等原生 UI */
   color-scheme: light dark;
+  /* 终态底色挂在根上：任何空帧/异步窗口都不再露出 UA 默认色 */
+  background-color: var(--color-bg);
+  color: var(--color-text);
 }
 
 html[data-theme="light"] {
@@ -29,6 +38,10 @@ html[data-theme="dark"] {
  * - 内容不足一屏：footer 自动贴底
  * - 内容超过一屏：footer 自然在内容末尾
  * - 无需 JS、无需 fixed 定位
+ *
+ * 注意：颜色过渡不在 body 默认态启用，只在用户主动切换主题时
+ * 通过 html.theme-changing 短暂启用，避免 dev 模式下 CSS 异步
+ * 应用、SSR 首帧等场景被 200ms transition 误推成视觉渐变。
  * ============================================================ */
 body {
   margin: 0;
@@ -45,8 +58,12 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeLegibility;
+}
 
-  /* 主题切换时的颜色过渡（克制 200ms） */
+/* 主题切换时的颜色过渡（克制 200ms · opt-in）
+ * 由 src/lib/theme.ts 的 markThemeChanging() 在 setTheme 调用时
+ * 临时给 <html> 加上 .theme-changing 类，250ms 后自动移除。 */
+html.theme-changing body {
   transition: background-color var(--dur-normal) var(--ease), color var(--dur-normal) var(--ease);
 }
 

@@ -67,7 +67,7 @@ import { t } from "@i18n/index";
 </style>
 
 <script>
-  import { getStoredTheme, setTheme, watchSystemTheme } from "@lib/theme";
+  import { applyTheme, getStoredTheme, setTheme, watchSystemTheme } from "@lib/theme";
   import type { Theme } from "@lib/theme";
 
   const ORDER: readonly Theme[] = ["system", "light", "dark"] as const;
@@ -82,6 +82,9 @@ import { t } from "@i18n/index";
     if (buttons.length === 0) return;
 
     const current = getStoredTheme();
+    // 兜底纠正：inline script 在 head 里跑得最早，理论上 data-theme / color-scheme
+    // 已经是终态。但若 localStorage 异常 / 浏览器扩展拦截过 inline，这里再同步一次。
+    applyTheme(current);
     for (const btn of buttons) syncButtonState(btn, current);
 
     for (const btn of buttons) {
