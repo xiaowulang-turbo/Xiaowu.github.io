@@ -340,7 +340,7 @@ Code 0.9375rem                     family: var(--font-mono)
 
 - 正文链接：颜色 = `--color-accent`，hover 显示下划线
 - 导航链接：颜色 = `--color-text`，激活态用 `--color-accent` 或 1px 下边线
-- 外链：自动加 `↗` 小图标，必带 `rel="noopener noreferrer"`
+- 外链：自动加外链图标（Lucide `arrow-up-right`，经 `<Icon>` 渲染，**禁止** `↗` 实体字符），必带 `rel="noopener noreferrer"`
 
 ### 8.4 卡片
 
@@ -364,13 +364,16 @@ Code 0.9375rem                     family: var(--font-mono)
 
 ---
 
-## 9. 图标
+## 9. 图标 ⛔
 
-- 统一使用 **Lucide** 图标库
-- 默认尺寸 16px / 20px / 24px（对应文字、按钮、图示）
-- 描边宽度统一 1.5px
+- 全站图标**统一来自单一图标来源**（当前为 **Lucide**），并**只能**通过 `<Icon>` 原子组件渲染（见 [`COMPONENT_PATTERNS.md`](./COMPONENT_PATTERNS.md) §2.4）
+- ⛔ **禁止**使用 HTML 实体 / Unicode 符号（如 `←` `→` `↗` `↓` `✕` `·`）充当图标
+- ⛔ **禁止**手抄 / 内联零散 SVG 路径绕过统一来源（包括「复制 Lucide path 自己贴一份」）
 - ⛔ **禁止**混用 emoji 与图标
 - ⛔ **禁止**装饰性图标过度（图标应辅助语义，不是装饰）
+- 默认尺寸 16px / 20px / 24px（对应文字、按钮、图示）
+- 描边宽度统一 1.5px
+- **例外**：正文 / 文案中作为**标点**出现的符号（分隔点 `·`、破折号 `—`、引号等）属排印标点而非图标，不受此限
 
 ---
 

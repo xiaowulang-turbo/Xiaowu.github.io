@@ -1,0 +1,39 @@
+---
+/**
+ * Icon.astro — 全站唯一图标入口（基于 Lucide / astro-icon）
+ *
+ * 红线：禁止用 HTML 实体 / Unicode 符号 / emoji / 手抄内联 SVG 绕过本组件
+ * （见 STYLE_GUIDE §9、AGENTS §3.5、COMPONENT_PATTERNS §2.4）。
+ *
+ * - 默认描边 1.5、尺寸 16px、颜色 currentColor（随上下文与 token 自适应）。
+ * - 装饰性图标默认 aria-hidden；语义图标传 `label` 暴露给辅助技术。
+ */
+import { Icon as AstroIcon } from "astro-icon/components";
+
+interface Props {
+  /** Lucide 图标名（不含前缀），如 "arrow-left" */
+  name: string;
+  /** 方形边长，px。默认 16 */
+  size?: number;
+  /** 描边宽度。默认 1.5（STYLE_GUIDE §9） */
+  strokeWidth?: number;
+  /** 提供则作为无障碍可见标签；缺省则 aria-hidden（装饰用途） */
+  label?: string;
+  class?: string;
+}
+
+const { name, size = 16, strokeWidth = 1.5, label, class: className } = Astro.props;
+
+const a11y = label
+  ? { "aria-label": label, role: "img" as const }
+  : { "aria-hidden": "true" as const };
+---
+
+<AstroIcon
+  name={`lucide:${name}`}
+  width={size}
+  height={size}
+  style={`--icon-sw:${strokeWidth}`}
+  class={["icon", className].filter(Boolean).join(" ")}
+  {...a11y}
+/>

@@ -5,6 +5,7 @@
  * 三态循环切换器：system → light → dark → system
  * 数据-状态：通过 [data-theme-state] 暴露给 CSS 控制图标显示
  */
+import Icon from "@components/primitives/Icon.astro";
 import { t } from "@i18n/index";
 ---
 
@@ -14,59 +15,9 @@ import { t } from "@i18n/index";
   aria-label={t("theme.toggle")}
   data-theme-state="system"
 >
-  <!-- system: 显示为月亮+太阳的复合（用一个简洁的"环"字符替代以保持极简） -->
-  <svg
-    class="icon icon-system"
-    width="18"
-    height="18"
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    stroke-width="1.5"
-    stroke-linecap="round"
-    stroke-linejoin="round"
-    aria-hidden="true"
-  >
-    <rect x="3" y="4" width="18" height="14" rx="2"></rect>
-    <path d="M8 21h8"></path>
-    <path d="M12 18v3"></path>
-  </svg>
-  <svg
-    class="icon icon-sun"
-    width="18"
-    height="18"
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    stroke-width="1.5"
-    stroke-linecap="round"
-    stroke-linejoin="round"
-    aria-hidden="true"
-  >
-    <circle cx="12" cy="12" r="4"></circle>
-    <path d="M12 2v2"></path>
-    <path d="M12 20v2"></path>
-    <path d="m4.93 4.93 1.41 1.41"></path>
-    <path d="m17.66 17.66 1.41 1.41"></path>
-    <path d="M2 12h2"></path>
-    <path d="M20 12h2"></path>
-    <path d="m4.93 19.07 1.41-1.41"></path>
-    <path d="m17.66 6.34 1.41-1.41"></path>
-  </svg>
-  <svg
-    class="icon icon-moon"
-    width="18"
-    height="18"
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    stroke-width="1.5"
-    stroke-linecap="round"
-    stroke-linejoin="round"
-    aria-hidden="true"
-  >
-    <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
-  </svg>
+  <Icon name="monitor" size={18} class="icon-system" />
+  <Icon name="sun" size={18} class="icon-sun" />
+  <Icon name="moon" size={18} class="icon-moon" />
 </button>
 
 <style>

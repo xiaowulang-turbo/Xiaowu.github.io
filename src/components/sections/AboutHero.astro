@@ -10,6 +10,7 @@
  * Kirito 彩蛋：纯 CSS，hover/focus 时通过 data-tease 显示追加文本。
  * 移动端不触发（无 hover），保持 caption 简洁。
  */
+import Icon from "@components/primitives/Icon.astro";
 import { ABOUT } from "@data/about";
 import { t } from "@i18n/index";
 
@@ -64,7 +65,7 @@ const formattedDate = lastUpdated.toLocaleDateString("en-US", {
     </p>
 
     <a class="keep-reading" href="#trajectory">
-      <span>↓</span>
+      <Icon name="chevron-down" />
       <span>{t("about.keepReading")}</span>
     </a>
   </div>

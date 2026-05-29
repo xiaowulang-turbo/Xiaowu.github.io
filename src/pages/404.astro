@@ -1,4 +1,5 @@
 ---
+import Icon from "@components/primitives/Icon.astro";
 import BaseLayout from "@layouts/BaseLayout.astro";
 import { t } from "@i18n/index";
 ---
@@ -10,7 +11,7 @@ import { t } from "@i18n/index";
       <p class="quote">{t("page.404.body")}</p>
       <p class="kirito">{t("page.404.kirito")}</p>
       <p class="back">
-        <a href="/" class="back-link">← {t("page.404.back")}</a>
+        <a href="/" class="back-link"><Icon name="arrow-left" size={14} /> {t("page.404.back")}</a>
       </p>
     </div>
   </section>
@@ -50,6 +51,9 @@ import { t } from "@i18n/index";
   }
 
   .back-link {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-1);
     color: var(--color-text-muted);
     border-bottom: 1px solid var(--color-border-strong);
     padding-bottom: 1px;

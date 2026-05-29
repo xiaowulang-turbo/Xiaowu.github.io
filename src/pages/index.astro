@@ -1,4 +1,5 @@
 ---
+import Icon from "@components/primitives/Icon.astro";
 import BaseLayout from "@layouts/BaseLayout.astro";
 import { SITE } from "@data/site";
 import { t } from "@i18n/index";
@@ -27,7 +28,8 @@ import { t } from "@i18n/index";
           target="_blank"
           rel="noopener noreferrer"
         >
-          {t("placeholder.roadmap")} →
+          {t("placeholder.roadmap")}
+          <Icon name="arrow-up-right" size={14} />
         </a>
       </p>
     </div>
@@ -96,6 +98,9 @@ import { t } from "@i18n/index";
   }
 
   .roadmap-link {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-1);
     color: var(--color-text);
     border-bottom: 1px solid var(--color-accent);
     padding-bottom: 2px;
