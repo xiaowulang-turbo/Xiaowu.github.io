@@ -93,21 +93,28 @@
 - [ ] 隐私自查 + 信息密度自查
 - [ ] 联系方式以「点击复制」形式呈现 Email
 
-### Projects
-- [ ] 卡片网格（封面 + 标题 + 摘要 + 技术栈 tag）
-- [ ] 标签筛选（客户端，无需后端）
-- [ ] 详情页（MDX 渲染 + 元信息边栏）
+### Projects（详见 RFC-0003）
+- [x] 两层结构：Selected Work 精选富卡片 + Archive 归档紧凑列表
+- [x] 详情页（仅精选旗舰项目，MDX 渲染 + 详情页头部）
+- [x] 内置首条真实项目（本门户站自身）+ `_TEMPLATE.mdx` 模板
+- [ ] 标签 / 类别筛选（客户端，项目量大后再做；本期遵循「少 > 多」未做）
+- [ ] 封面图（文字优先，`cover` 字段已预留，后续按需启用）
+- [ ] 补充真实 GitHub 小工具 / 脚本进 Archive 区（待用户提供）
 
-### AI
-- [ ] 总览页：四个子板块入口卡
-- [ ] AI Insights 列表 + 详情
+### AI（详见 RFC-0004）
+- [x] `/ai` 协作原则页：编号宣言列表（提炼自 AGENTS.md / user rules / WRITING_GUIDE）
+- [x] `src/data/ai.ts` 原则数据 + Zod 校验
+- [ ] AI Insights 列表 + 详情（schema 已备，暂不产出内容）
 - [ ] MCP 推荐（卡片式，含分类、用途、链接）
 - [ ] Skill 推荐（卡片式）
 - [ ] AI Lab（自研工具列表，含状态：active / paused / archived）
+- [ ] 四子板块入口 hub（待四类内容有产出后再考虑，遵循「少 > 多」）
 
-### Thoughts
-- [ ] 列表（按 category 分组：frontend / engineering / ...）
-- [ ] 详情页（MDX + 阅读进度条 + 目录）
+### Thoughts（详见 RFC-0006）
+- [x] 信条墙：短信条按主题分组（取舍 / 克制 / 工程 / 真诚），数据源 `src/data/thoughts.ts`
+- [x] 首批信条萃取自本仓库开发规范（AGENTS / STYLE_GUIDE / WRITING_GUIDE）
+- [ ] 长文博客：列表（按 category 分组）+ 详情页（MDX + 阅读进度 + 目录）——待长文积累后另开 RFC
+- [ ] 信条阐述措辞由作者用自己口吻审校（当前为 [DRAFT]）
 
 ### 横切
 - [ ] 顶部主导航（响应式：移动端汉堡菜单）

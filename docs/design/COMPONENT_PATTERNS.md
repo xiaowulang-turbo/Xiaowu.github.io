@@ -75,8 +75,21 @@ interface Props {
 
 ### 2.4 `<Icon>`
 
-- 基于 Lucide
-- **Props**：`name` | `size?` | `strokeWidth?`（默认 1.5）
+- 基于 Lucide（astro-icon + `@iconify-json/lucide`，构建期内联 SVG、零运行时 JS），是全站**唯一合规**的图标渲染路径（见 STYLE_GUIDE §9 红线）
+- ⛔ 禁止用 HTML 实体 / Unicode 符号 / emoji / 手抄内联 SVG 绕过本组件
+- **Props**：`name`（Lucide 名，不含前缀）| `size?`（默认 16）| `strokeWidth?`（默认 1.5）| `label?`（提供则无障碍标签，否则 `aria-hidden`）| `class?`
+
+**用法**：
+
+```astro
+---
+import Icon from "@components/primitives/Icon.astro";
+---
+<Icon name="arrow-up-right" size={14} />      <!-- 装饰：自动 aria-hidden -->
+<Icon name="search" label="搜索" />            <!-- 语义：role=img + aria-label -->
+```
+
+> 与文本同排时，父容器用 `align-items: center`（svg 无文本基线）。
 
 ### 2.5 `<Kbd>`
 
@@ -165,13 +178,47 @@ interface Props {
 - About 页的侧边锚点导航
 - 滚动时高亮当前节
 
-### 4.5 `<ProjectGrid>` / `<ProjectDetailHeader>`
+### 4.5 Projects 板块组件（RFC-0003 已落地）
 
-### 4.6 `<AIHub>`（AI 板块入口）
+按「精选 + 归档」两层结构，文字优先、零封面图：
 
-- 4 个子板块入口卡（Insights / MCP / Skills / Lab）
+| 组件 | 类型 | 职责 | Props |
+|---|---|---|---|
+| `sections/ProjectsSelected.astro` | section | 精选旗舰项目富卡片网格（复用 AboutNow 卡片范式，md 1 列 / lg 2 列），标题链 `/projects/[slug]` | `projects: CollectionEntry<"projects">[]` |
+| `sections/ProjectsArchive.astro` | section | 长尾项目紧凑列表（复用 AboutTrackRecord「年份 + 正文」栅格），名称外链 GitHub | `projects: CollectionEntry<"projects">[]` |
+| `sections/ProjectDetailHeader.astro` | section | 详情页头部：返回链接 + 标题 + 元信息（日期 · category · status）+ 摘要 + 技术 chip + 源码/演示链接 | `project: CollectionEntry<"projects">` |
 
-### 4.7 `<ThoughtList>` / `<ThoughtCategoryGroup>`
+约定：
+
+- 数据在 `pages/projects/index.astro` 一次取出并按 `featured` 拆分下发，section 保持纯展示。
+- 详情页 `/projects/[slug]` 仅为 `featured` 项构建；归档项不建详情页。
+- status / category 文案经 `i18n/zh.ts` 的 `projects.status.*` / `projects.category.*`。
+- 技术 chip / status 徽章遵循 STYLE_GUIDE §8.5，未抽 `Tag` 原子（项目量小，少 > 多）。
+
+### 4.6 `<AiPrinciples>`（AI 协作原则）— RFC-0004 已落地
+
+- 编号宣言列表：复用 `AboutAskedQuestions` 的 `01/02` mono + accent 编号范式，扩展为「编号 + 标题 + 一句解释」。
+- 数据来自 `src/data/ai.ts`（`principles: { title, body }[]`），section 纯展示。
+- 容器内单条 `max-width: var(--prose-max)` 保证阅读宽度；条目间距 `--space-12`。
+
+> `<AIHub>`（四子板块入口卡：Insights / MCP / Skills / Lab）**推迟**：四类内容暂无产出，
+> 搭空入口违反「少 > 多」，留待后续迭代（见 ROADMAP）。
+
+### 4.7 Thoughts 板块组件（RFC-0006 已落地）
+
+心得页采用「信条墙」形态：按主题分组的短信条，文字优先、零封面图。
+
+| 组件 | 类型 | 职责 | Props |
+|---|---|---|---|
+| `sections/ThoughtsPrinciples.astro` | section | 按主题分组渲染短信条；每组一个 `<section data-reveal>`，每条复用 `AboutTrackRecord`「左 mono 条款号 + 右正文」栅格 | `groups: Thoughts["groups"]` |
+
+约定：
+
+- 数据源为 `src/data/thoughts.ts`（结构化数据 + Zod 加载校验，仿 `about.ts`），**非** `thoughts` MDX collection；后者保留待未来长文。
+- 每条信条仅「条款号 + 标题 + 阐述」三件：左列 mono 条款号即来源引用，右侧不另设来源标注（守 STYLE_GUIDE §7）。
+- 数据在 `pages/thoughts/index.astro` 取出后整组下发，section 保持纯展示；`groups` 为空时页面渲染空状态。
+
+### 4.8 `<ThoughtList>` / `<ThoughtCategoryGroup>`（未来长文版，待 RFC）
 
 ---
 

@@ -87,14 +87,34 @@ export const zh = {
   "about.wantMore.title": "Want more?",
 
   "page.projects.title": "项目",
-  "page.projects.placeholder": "这里以后会陈列我在 GitHub 上认真做过、愿意拿出来分享的项目。",
+  "page.projects.intro":
+    "这里陈列我认真做过、愿意拿出来分享的东西——工作里的 Agent 项目，以及 GitHub 上的小工具与脚本。",
+
+  /* —— Projects 板块（v1.0）—— */
+  "projects.selected.title": "Selected Work",
+  "projects.archive.title": "Archive",
+  "projects.empty": "项目正在整理中，很快就会出现在这里。",
+
+  "projects.status.active": "进行中",
+  "projects.status.wip": "开发中",
+  "projects.status.archived": "已归档",
+
+  "projects.category.web": "Web",
+  "projects.category.tool": "工具",
+  "projects.category.library": "开源库",
+  "projects.category.experiment": "实验",
+  "projects.category.ai": "AI",
+
+  "projects.viewSource": "源码",
+  "projects.viewDemo": "演示",
+  "projects.backToList": "项目",
 
   "page.ai.title": "AI",
-  "page.ai.placeholder":
-    "这里以后会有我对 AI 协作的心得、推荐的 MCP 与 Skill，以及我自己写的 AI 工具。",
 
   "page.thoughts.title": "心得",
-  "page.thoughts.placeholder": "这里以后会是我对前端、工程化、设计与软件之道的思考与笔记。",
+  "page.thoughts.intro":
+    "一些我反复确认的小信条——关于取舍、克制、工程与真诚。它们大多先成了这个站点的开发规范，再沉淀成这里的句子。",
+  "thoughts.empty": "信条还在沉淀，很快会出现在这里。",
 
   "page.404.title": "404",
   "page.404.body": "Not all those who wander are lost — but this page is.",

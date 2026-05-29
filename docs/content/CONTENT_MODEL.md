@@ -151,8 +151,13 @@
 
 ### 2.6 `thoughts`
 
+> ⚠️ **当前 `/thoughts` 不使用本 collection**（RFC-0006）。
+> v1.0 心得页采用「信条墙」形态：短信条按主题分组，数据源为 `src/data/thoughts.ts`
+> （结构化数据 + Zod 加载校验，仿 `about.ts`，详见 RFC-0006 §4.3）。
+> 下方 MDX collection schema **保留不动**，留给未来长文博客（待积累后另开 RFC 启用）。
+
 > 路径：`src/content/thoughts/<slug>.mdx`
-> 路由：`/thoughts/[slug]`，列表 `/thoughts`
+> 路由：`/thoughts/[slug]`（长文版，未启用），列表 `/thoughts`（当前为信条墙）
 
 ```ts
 {
@@ -196,6 +201,30 @@ Schema 实施于 `src/data/about.ts`，约束包括：
 > **隐私强提醒**：`about` 的所有字段都可能涉及敏感信息。
 > 写入前必须按 `AGENTS.md` §1.3 流程逐项询问。
 > v1.0 字段处理决策见 RFC-0002 §6 隐私自查矩阵。
+
+### 2.8 `ai`（结构化数据，非 collection）
+
+> 路径：`src/data/ai.ts`
+> 路由：`/ai`
+> 形态：**TypeScript 模块 + Zod 加载时校验**，**不是** Content Collection
+
+**为什么不用 collection**：`/ai` v1.0 是「我与 AI 协作的原则」内容页，原则是短结构化条目而非长文章；
+放进 `src/data/`（与 `about.ts` 一致）比建 `ai-insights` collection 更克制，且避免空 collection runtime。
+详见 [`docs/rfcs/0004-ai-section.md`](../rfcs/0004-ai-section.md)。
+
+```ts
+{
+  intro: string;                              // 页面引语
+  principles: { title: string; body: string }[];  // 3~8 条协作原则
+  lastUpdated: Date;
+}
+```
+
+> **来源与隐私**：原则提炼转写自 `AGENTS.md` / user rules / `WRITING_GUIDE.md`，
+> 仅保留方法论层面的公开表达，**不照搬**仓库内部宪法原文、不含敏感字段（RFC-0004 §4.6）。
+>
+> 注：`ai-insights` / `ai-mcp` / `ai-skills` / `ai-lab` 四个 collection 的 schema 仍保留（见 §2.2–2.5），
+> 但 v1.0 暂不产出内容，留待后续迭代。
 
 ---
 
