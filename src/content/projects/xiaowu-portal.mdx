@@ -1,0 +1,30 @@
+---
+title: "Xiaowu.github.io"
+summary: "用克制做长期的事——文档驱动、零 JS 默认的个人门户站。"
+date: 2026-05-20
+tags: [astro, typescript, tailwind]
+category: web
+status: wip
+repo: https://github.com/xiaowulang-turbo/Xiaowu.github.io
+demo: https://xiaowulang.vercel.app
+techStack: [Astro, TypeScript, "Tailwind CSS", MDX]
+featured: true
+order: 10
+---
+
+## 项目背景
+
+这是我的个人门户站，定位「极简 × 优雅」的内容驱动站点。它不是一个堆功能的项目，而是一次关于**克制**的长期实践：每一处装饰都要回答「不加会更好吗」。
+
+整个仓库采用**文档驱动开发**——`AGENTS.md` 是 AI 协作宪法，每个主题都有唯一真理来源（SoT），任何新板块开发前先写 RFC、经确认再动手。
+
+## 技术亮点
+
+- **零 JS 默认**：基于 Astro 的 Islands 架构，绝大多数页面不向客户端发送 JavaScript。
+- **Token 驱动视觉**：全站颜色、间距、圆角、动效统一来自 `tokens.css`，一处改动全站生效，且天然支持深浅模式对称设计。
+- **强 Schema 内容层**：所有内容以 MDX 存放，由 Zod 强校验，字段写错构建即失败。
+- **严格分层**：`pages → layouts → sections → ui → primitives` 单向调用，页面只做组装。
+
+## 现状
+
+站点处于 v0.5 → v1.0 过渡阶段：基础设施与规范已完善，正在逐板块产出真实内容。你正在看的这个项目页就是其中一步。

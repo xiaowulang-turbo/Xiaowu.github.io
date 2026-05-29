@@ -1,0 +1,34 @@
+---
+# ⚠️ 模板文件：以 _ 开头，Astro 内容集合会自动忽略，不会被构建。
+# 新增项目时：复制本文件 → 重命名为 <slug>.mdx（kebab-case）→ 填写下方字段。
+#
+# 字段说明（schema 见 src/content/config.ts 的 projects）：
+title: "项目名称"
+summary: "一句话摘要，≤ 120 字。"          # 必填
+date: 2026-01-01                          # 必填，项目起始 / 上线日期
+# updated: 2026-02-01                     # 可选，最近更新
+tags: [typescript]                        # 小写 kebab，≤ 5 个
+category: tool                            # web | tool | library | experiment | ai
+status: active                            # active | wip | archived
+# repo: https://github.com/you/your-repo  # 真实可访问；不确定就删掉整行（禁止填示例链接）
+# demo: https://your-demo.example.com     # 真实可访问；同上
+techStack: [TypeScript]                   # 展示用技术 chip
+featured: false                           # true = 进 Selected Work 并生成详情页；false = 进 Archive
+# order: 10                               # 精选区排序权重，越小越靠前
+# draft: true                             # true 时不参与构建
+---
+
+<!--
+  featured: true 的项目会渲染本正文为 /projects/<slug> 详情页。
+  featured: false（归档）项目不读取正文，名称直接外链 GitHub。
+
+  正文建议结构：
+-->
+
+## 项目背景
+
+...
+
+## 技术亮点
+
+...
