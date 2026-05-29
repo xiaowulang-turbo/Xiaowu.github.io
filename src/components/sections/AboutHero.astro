@@ -74,18 +74,21 @@ const formattedDate = lastUpdated.toLocaleDateString("en-US", {
 <style>
   .hero {
     min-height: 100svh;
-    padding-block: clamp(8rem, 18vh, 14rem) var(--space-16);
+    /* RFC-0007 patch：与 home 完全一致的顶/底 padding，五页首屏锚点统一。
+     * 100svh 保留——承载"独占首屏"语义（RFC-0002 §M1）；
+     * 高视口下多出的纵向空间沉到底部，与 keep-reading 暗示天然契合。 */
+    padding-block: var(--hero-pad-top) var(--hero-pad-bottom);
     display: flex;
     align-items: flex-start;
   }
 
   .hero-inner {
-    max-width: var(--prose-max);
+    max-width: var(--hero-content-max);
     width: 100%;
   }
 
   .eyebrow {
-    margin: 0 0 var(--space-12);
+    margin: 0 0 var(--hero-mb-eyebrow);
     color: var(--color-text-subtle);
     font-family: var(--font-mono);
     font-size: var(--text-caption);
@@ -101,7 +104,11 @@ const formattedDate = lastUpdated.toLocaleDateString("en-US", {
 
   .display {
     margin: 0 0 var(--space-3);
-    font-size: clamp(3rem, 8vw, 6.5rem);
+    /* RFC-0007：与 home hero 共用同一字号公式（48 → 80），
+     * 不再保留 about 独有的 8vw / 6.5rem 上限——
+     * 识别度交给 eyebrow（含 lastUpdated）/ aka 行 / lead 文案，
+     * 而非通过 H1 字号差异强调。 */
+    font-size: var(--hero-display);
     font-weight: var(--font-weight-semibold);
     line-height: 1.05;
     letter-spacing: var(--tracking-tight);

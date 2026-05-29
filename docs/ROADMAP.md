@@ -122,6 +122,7 @@
 - [ ] 404 页（Kirito 彩蛋）
 - [ ] 主题切换器（light / dark / system）
 - [ ] OG Image（每页一张，结构预留）
+- [x] 五页首屏锚点统一：Hero / PageHead 两层节奏 token + `<PageHead>` 共享组件（RFC-0007）
 
 ---
 

@@ -7,6 +7,7 @@
  * 现有 thoughts MDX collection 保留待长文，本页不使用。
  */
 import BaseLayout from "@layouts/BaseLayout.astro";
+import PageHead from "@components/sections/PageHead.astro";
 import ThoughtsPrinciples from "@components/sections/ThoughtsPrinciples.astro";
 import { THOUGHTS } from "@data/thoughts";
 import { t } from "@i18n/index";
@@ -16,12 +17,7 @@ const isEmpty = groups.length === 0;
 ---
 
 <BaseLayout title={t("page.thoughts.title")} description={t("page.thoughts.intro")}>
-  <section class="page-head">
-    <div class="container page-head-inner">
-      <h1 class="title">{t("page.thoughts.title")}</h1>
-      <p class="intro">{t("page.thoughts.intro")}</p>
-    </div>
-  </section>
+  <PageHead title={t("page.thoughts.title")} intro={t("page.thoughts.intro")} />
 
   {!isEmpty && <ThoughtsPrinciples groups={groups} />}
 
@@ -37,25 +33,6 @@ const isEmpty = groups.length === 0;
 </BaseLayout>
 
 <style>
-  .page-head {
-    padding-block: var(--space-24) var(--space-8);
-  }
-
-  .page-head-inner {
-    max-width: var(--prose-max);
-  }
-
-  .title {
-    margin: 0 0 var(--space-6);
-  }
-
-  .intro {
-    margin: 0;
-    color: var(--color-text-muted);
-    font-size: 1.125rem;
-    line-height: var(--leading-relaxed);
-  }
-
   .empty {
     padding-block: var(--space-16) var(--space-24);
   }
@@ -66,3 +43,4 @@ const isEmpty = groups.length === 0;
     line-height: var(--leading-relaxed);
   }
 </style>
+

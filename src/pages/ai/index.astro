@@ -6,39 +6,15 @@
  * 内容来自 src/data/ai.ts。insights / mcp / skills / lab 暂不做（见 RFC-0004 / ROADMAP）。
  */
 import BaseLayout from "@layouts/BaseLayout.astro";
+import PageHead from "@components/sections/PageHead.astro";
 import AiPrinciples from "@components/sections/AiPrinciples.astro";
 import { AI } from "@data/ai";
 import { t } from "@i18n/index";
 ---
 
 <BaseLayout title={t("page.ai.title")} description={AI.intro}>
-  <section class="page-head">
-    <div class="container page-head-inner">
-      <h1 class="title">{t("page.ai.title")}</h1>
-      <p class="intro">{AI.intro}</p>
-    </div>
-  </section>
+  <PageHead title={t("page.ai.title")} intro={AI.intro} />
 
   <AiPrinciples />
 </BaseLayout>
 
-<style>
-  .page-head {
-    padding-block: var(--space-24) var(--space-8);
-  }
-
-  .page-head-inner {
-    max-width: var(--prose-max);
-  }
-
-  .title {
-    margin: 0 0 var(--space-6);
-  }
-
-  .intro {
-    margin: 0;
-    color: var(--color-text-muted);
-    font-size: 1.125rem;
-    line-height: var(--leading-relaxed);
-  }
-</style>

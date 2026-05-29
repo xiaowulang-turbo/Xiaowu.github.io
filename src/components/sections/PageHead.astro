@@ -1,0 +1,50 @@
+---
+/**
+ * PageHead.astro — 列表页头（RFC-0007）
+ *
+ * 共享给 projects / ai / thoughts 三处列表页。仅承载：
+ *   - <h1>title</h1>（必填，字号继承 globals.css 的 h1 = --text-h1）
+ *   - <p>intro</p>（选填，1.125rem / muted）
+ *
+ * 节奏由 tokens.css §4.5 的 --pagehead-* 系列驱动，三页内部锚点完全一致。
+ *
+ * 约束（COMPONENT_PATTERNS §4.x）：
+ *   - 不接受 children / 默认 slot：v1.0 仅 title + intro，避免被滥用塞图标 / 徽章。
+ *   - 如需额外结构请单开 section，不要扩本组件。
+ */
+interface Props {
+  title: string;
+  intro?: string;
+}
+
+const { title, intro } = Astro.props;
+---
+
+<section class="page-head">
+  <div class="container page-head-inner">
+    <h1 class="title">{title}</h1>
+    {intro && <p class="intro">{intro}</p>}
+  </div>
+</section>
+
+<style>
+  .page-head {
+    padding-block: var(--pagehead-pad-top) var(--pagehead-pad-bottom);
+  }
+
+  .page-head-inner {
+    max-width: var(--prose-max);
+  }
+
+  .title {
+    /* 不写 font-size：继承 globals.css 的 h1 = --text-h1，单一来源 */
+    margin: 0 0 var(--pagehead-mb-title);
+  }
+
+  .intro {
+    margin: 0;
+    color: var(--color-text-muted);
+    font-size: 1.125rem;
+    line-height: var(--leading-relaxed);
+  }
+</style>

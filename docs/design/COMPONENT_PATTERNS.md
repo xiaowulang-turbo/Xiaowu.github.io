@@ -221,6 +221,44 @@ interface Props {
 
 ### 4.8 `<ThoughtList>` / `<ThoughtCategoryGroup>`（未来长文版，待 RFC）
 
+### 4.9 `<PageHead>`（列表页头）— RFC-0007 已落地
+
+跨 `/projects` `/ai` `/thoughts` 三处复用的薄页头，统一上 padding、容器宽度与 title→intro 间距。
+
+| 项 | 取值 |
+|---|---|
+| 路径 | `src/components/sections/PageHead.astro` |
+| 容器 | `.container` + `max-width: var(--prose-max)` |
+| 节奏 token | `--pagehead-pad-top` / `--pagehead-pad-bottom` / `--pagehead-mb-title`（DESIGN_TOKENS §4.5） |
+| 字号 | 继承 globals.css 的 `h1 = var(--text-h1)`，组件内**不重写 `font-size`**（单一来源） |
+
+**Props**：
+
+```ts
+interface Props {
+  title: string;     // 必填，渲染为 <h1>
+  intro?: string;    // 选填，1.125rem / muted 的说明段落
+}
+```
+
+**约束**（不可放宽）：
+
+- ⛔ **不接受** `children` / 默认 slot：v1.0 仅承载 title + intro。
+- ⛔ **禁止**扩展接受 icon / badge / CTA 按钮等结构 —— 如有需要，单独抽 section（如 `<XxxIntro>`），不要扩本组件。
+- ⛔ **不引入** Hero 类装饰（背景色、渐变、min-height、独占首屏）；那一档归属 `<Hero>` 与 `<AboutHero>`。
+
+**用法**：
+
+```astro
+---
+import PageHead from "@components/sections/PageHead.astro";
+import { t } from "@i18n/index";
+---
+<PageHead title={t("page.projects.title")} intro={t("page.projects.intro")} />
+```
+
+> Hero 层（home + about）**不**走本组件——两页的内部结构（双行 display / aka 彩蛋 / lead / meta / keep-reading）差异大于共性，强抽产生胶水代码（详见 RFC-0007 §10.2）。Hero 一致性通过共享 `--hero-*` token 表达。
+
 ---
 
 ## 5. 通用规范

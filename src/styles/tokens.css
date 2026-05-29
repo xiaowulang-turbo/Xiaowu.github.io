@@ -71,6 +71,28 @@
   --hero-max: 960px;
 
   /* ============================================================
+   * 页头节奏 / Page-head Rhythm — RFC-0007
+   *
+   * 站点首屏切 tab 时锚点稳定的关键。两层节奏：
+   *   1) Hero 层（home + about 共享）：站点级身份页，padding 大、display 字号大
+   *   2) PageHead 层（projects + ai + thoughts 共享）：列表页头，padding 中、字号 --text-h1
+   *
+   * 所有 token 均映射到现有 --space-* 与字号公式，不引入新数值。
+   * ============================================================ */
+
+  /* —— Hero 节奏 —— */
+  --hero-pad-top: var(--space-32); /* 128px：home 与 about 一致的顶 padding */
+  --hero-pad-bottom: var(--space-16); /* 64px */
+  --hero-display: clamp(3rem, 7vw, 5rem); /* 48 → 80：home 与 about 共享 display 字号公式 */
+  --hero-content-max: var(--prose-max); /* 680px：home / about / pagehead 共享内容容器宽度，五页左缘对齐 */
+  --hero-mb-eyebrow: var(--space-8); /* 32px：home + about 共用 eyebrow → H1 的纵向距离，切 tab 时顶部锚点稳 */
+
+  /* —— PageHead 节奏 —— */
+  --pagehead-pad-top: var(--space-24); /* 96px */
+  --pagehead-pad-bottom: var(--space-8); /* 32px：与下方区块自带 padding 组合后视觉间距 ≈ 64px */
+  --pagehead-mb-title: var(--space-6); /* 24px：title 与 intro 之间的间距 */
+
+  /* ============================================================
    * 字体栈 / Font Stacks
    * ============================================================ */
   --font-sans: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",

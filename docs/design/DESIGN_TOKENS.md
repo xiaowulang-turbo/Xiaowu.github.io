@@ -135,6 +135,44 @@
 
 ---
 
+## 4.5 页头节奏（Page-head Rhythm）—— RFC-0007
+
+> 站点首屏切 tab 时锚点稳定的关键。把首屏分两层：**Hero 层**（home + about）与
+> **PageHead 层**（projects + ai + thoughts）。各自内部完全一致；两层之间是有规律的两档差。
+>
+> 所有取值均映射到现有 `--space-*` 与字号公式，**不引入新数值**。
+
+```css
+:root {
+  /* —— Hero 节奏（home + about 共享） —— */
+  --hero-pad-top:    var(--space-32);             /* 128px */
+  --hero-pad-bottom: var(--space-16);             /*  64px */
+  --hero-display:    clamp(3rem, 7vw, 5rem);      /*  48 → 80 */
+  --hero-content-max: var(--prose-max);           /* 680px：与 PageHead 同宽，五页左缘对齐 */
+  --hero-mb-eyebrow:  var(--space-8);             /*  32px：eyebrow → H1 距离，home + about 共用 */
+
+  /* —— PageHead 节奏（projects + ai + thoughts 共享） —— */
+  --pagehead-pad-top:    var(--space-24);         /*  96px */
+  --pagehead-pad-bottom: var(--space-8);          /*  32px */
+  --pagehead-mb-title:   var(--space-6);          /*  24px */
+}
+```
+
+| Token | 用途 |
+|---|---|
+| `--hero-pad-top` | Hero `padding-block-start`（home + about 一致；about 不再叠 `18vh` clamp） |
+| `--hero-pad-bottom` | Hero `padding-block-end` |
+| `--hero-display` | Hero `<h1>` 的 `font-size`（home + about 一致） |
+| `--hero-content-max` | Hero 内容容器（`.hero-inner`）`max-width`，与 PageHead 共用 `--prose-max`，五页左缘统一锚定 |
+| `--hero-mb-eyebrow` | Hero 内 `.eyebrow` 的 `margin-bottom`（home + about 一致），承担"顶部 → H1"纵向锚点 |
+| `--pagehead-pad-top` | `<PageHead>` `padding-block-start` |
+| `--pagehead-pad-bottom` | `<PageHead>` `padding-block-end` |
+| `--pagehead-mb-title` | `<PageHead>` 内 title → intro 间距 |
+
+> **不要**为 `<PageHead>` 的 `<h1>` 字号建独立 token：直接继承 globals.css 的 `h1 { font-size: var(--text-h1); }`，保持单一来源。
+
+---
+
 ## 5. 排版（Typography）
 
 ### 5.1 字体栈
@@ -324,3 +362,6 @@
 | 日期 | 版本 | 变更 |
 |---|---|---|
 | v0.1 | 地基 | 初始定稿 |
+| v0.6 | RFC-0007 | 新增 §4.5「页头节奏」：`--hero-pad-top/-bottom/--hero-display` 与 `--pagehead-pad-top/-bottom/--mb-title` 共 6 个语义 token |
+| v0.6.1 | RFC-0007 patch | §4.5 增 `--hero-content-max`（= `--prose-max`），统一 home / about 的 `.hero-inner` 宽度，使五页首屏左缘锚点一致；同步移除 about 的 `clamp(...,18vh,14rem)` 顶 padding 例外 |
+| v0.6.2 | RFC-0007 patch | §4.5 增 `--hero-mb-eyebrow`（= `--space-8`），统一 home / about 的 `.eyebrow → H1` 间距（about 由 48px 收紧到 32px），消除切 tab 时 H1 的纵向跳跃 |

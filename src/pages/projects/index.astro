@@ -9,6 +9,7 @@
  */
 import { getCollection } from "astro:content";
 import BaseLayout from "@layouts/BaseLayout.astro";
+import PageHead from "@components/sections/PageHead.astro";
 import ProjectsSelected from "@components/sections/ProjectsSelected.astro";
 import ProjectsArchive from "@components/sections/ProjectsArchive.astro";
 import { t } from "@i18n/index";
@@ -32,12 +33,7 @@ const isEmpty = all.length === 0;
 ---
 
 <BaseLayout title={t("page.projects.title")} description={t("page.projects.intro")}>
-  <section class="page-head">
-    <div class="container page-head-inner">
-      <h1 class="title">{t("page.projects.title")}</h1>
-      <p class="intro">{t("page.projects.intro")}</p>
-    </div>
-  </section>
+  <PageHead title={t("page.projects.title")} intro={t("page.projects.intro")} />
 
   {selected.length > 0 && <ProjectsSelected projects={selected} />}
   {archive.length > 0 && <ProjectsArchive projects={archive} />}
@@ -54,25 +50,6 @@ const isEmpty = all.length === 0;
 </BaseLayout>
 
 <style>
-  .page-head {
-    padding-block: var(--space-24) var(--space-8);
-  }
-
-  .page-head-inner {
-    max-width: var(--prose-max);
-  }
-
-  .title {
-    margin: 0 0 var(--space-6);
-  }
-
-  .intro {
-    margin: 0;
-    color: var(--color-text-muted);
-    font-size: 1.125rem;
-    line-height: var(--leading-relaxed);
-  }
-
   .empty {
     padding-block: var(--space-16) var(--space-24);
   }
@@ -83,3 +60,4 @@ const isEmpty = all.length === 0;
     line-height: var(--leading-relaxed);
   }
 </style>
+

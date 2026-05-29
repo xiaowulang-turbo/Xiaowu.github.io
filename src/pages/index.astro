@@ -38,15 +38,15 @@ import { t } from "@i18n/index";
 
 <style>
   .hero {
-    padding-block: var(--space-32) var(--space-16);
+    padding-block: var(--hero-pad-top) var(--hero-pad-bottom);
   }
 
   .hero-inner {
-    max-width: var(--hero-max);
+    max-width: var(--hero-content-max);
   }
 
   .eyebrow {
-    margin: 0 0 var(--space-8);
+    margin: 0 0 var(--hero-mb-eyebrow);
     color: var(--color-text-subtle);
     font-size: var(--text-caption);
     letter-spacing: var(--tracking-wide);
@@ -55,7 +55,7 @@ import { t } from "@i18n/index";
 
   .display {
     margin: 0 0 var(--space-8);
-    font-size: clamp(3rem, 7vw, 5rem);
+    font-size: var(--hero-display);
     line-height: 1.05;
     letter-spacing: var(--tracking-tight);
     font-weight: var(--font-weight-semibold);
