@@ -94,12 +94,39 @@
 
   /* ============================================================
    * 字体栈 / Font Stacks
+   *
+   * 详见 docs/rfcs/0008-fonts-strategy.md
+   *
+   * 设计原则：
+   * 1. 西文优先 → 系统西文兜底 → 系统中文兜底
+   *    西文走 Inter / JetBrains Mono（构建期下载、运行时自托管），
+   *    中文继续走系统栈，不引入任何 CJK web 字体（避免 5MB+ 体积）。
+   *
+   * 2. Windows 中文优先序：思源黑体 > 微软雅黑（仓库主人偏好）。
+   *    思源在字距/笔画粗细上比微软雅黑更接近 macOS PingFang，
+   *    装了思源的 Windows 用户就能与 macOS 用户视觉对齐；
+   *    没装则透明 fallback 到微软雅黑，用户无感知。
+   *
+   * 3. var(--font-inter, "") 的空字符串 fallback：
+   *    Astro fonts 启用前 / 加载失败时，CSS 解析为 `font-family: , …`
+   *    会因为非法 token 跳到下一项（系统字体），不会整条声明被忽略。
+   *    这是 CSS Variables L1 标准行为，全现代浏览器（Chrome 49+ /
+   *    Firefox 31+ / Safari 9.1+）支持。
    * ============================================================ */
-  --font-sans: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
-    "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+  --font-sans:
+    var(--font-inter, ""), ui-sans-serif, system-ui, -apple-system,
+    BlinkMacSystemFont, "Segoe UI",
+    "PingFang SC", "Hiragino Sans GB",
+    "Source Han Sans SC", "Source Han Sans CN", "Noto Sans CJK SC",
+    "Microsoft YaHei",
+    sans-serif;
+
+  /* Serif：v1 不主动使用，预留给未来长文（与 Sans 区分层级时再启用） */
   --font-serif: ui-serif, Georgia, Cambria, "Times New Roman", "Source Han Serif SC",
     "Noto Serif CJK SC", serif;
-  --font-mono: ui-monospace, "JetBrains Mono", "Fira Code", "SF Mono", Menlo, Consolas, monospace;
+
+  /* Mono：等宽优先 → 系统等宽兜底（中文场景下浏览器自动 fallback 到系统中文 sans，无需额外列出） */
+  --font-mono: var(--font-jetbrains-mono, ""), ui-monospace, "SF Mono", Menlo, Consolas, monospace;
 
   /* ============================================================
    * 字号 / Type Scale

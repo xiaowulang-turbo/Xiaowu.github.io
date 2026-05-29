@@ -87,24 +87,44 @@
 
 ### 2.1 字体策略
 
-> 当前阶段：使用**系统字体栈**，性能最佳，等内容产出后再讨论自定义字体。
-> 字体通过 CSS 变量抽象，未来可一行替换。
+> 已选型 — 详见 [`docs/rfcs/0008-fonts-strategy.md`](../rfcs/0008-fonts-strategy.md)（决策于 2026-05-29）。
+>
+> - **西文 Sans**：Inter Variable（latin + latin-ext，400/500/600/700）
+> - **西文 Serif**：v1 不引入（按 `AGENTS.md §2.4.2 少 > 多`，未来需要再单独 RFC）
+> - **等宽**：JetBrains Mono Variable（latin，400/500/700，**禁用连字**）
+> - **中文 Sans**：纯系统栈，不引入任何 CJK web 字体（避免 5MB+ 体积）
+>
+> 加载方式：Astro 5 内置 `experimental.fonts` + Google provider。
+> ⚠️ **关键**：仅在构建期下载到本地，运行时**完全自托管**在 Vercel CDN，
+> 访客浏览器不接触任何第三方域名（隐私守住 `AGENTS.md §1.5`）。
 
 ```
---font-sans:  ui-sans-serif, system-ui, -apple-system,
-              "Segoe UI", "PingFang SC", "Hiragino Sans GB",
-              "Microsoft YaHei", sans-serif;
---font-serif: ui-serif, Georgia, "Source Han Serif SC", serif;
---font-mono:  ui-monospace, "JetBrains Mono", "Fira Code",
-              Menlo, Consolas, monospace;
+/* 西文优先 → 系统西文兜底 → 系统中文兜底（思源 > 雅黑） */
+--font-sans:  var(--font-inter, ""),
+              ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+              "PingFang SC", "Hiragino Sans GB",
+              "Source Han Sans SC", "Source Han Sans CN", "Noto Sans CJK SC",
+              "Microsoft YaHei",
+              sans-serif;
+
+/* Serif：v1 不主动使用，预留给未来长文 */
+--font-serif: ui-serif, Georgia, Cambria, "Times New Roman",
+              "Source Han Serif SC", "Noto Serif CJK SC",
+              serif;
+
+/* 等宽：连字在 globals.css 中通过 font-variant-ligatures: none 关闭 */
+--font-mono:  var(--font-jetbrains-mono, ""),
+              ui-monospace, "SF Mono", Menlo, Consolas,
+              monospace;
 ```
 
-未来候选自定义字体（**待讨论**，不要擅自接入）：
-- Sans: Inter / Geist / IBM Plex Sans
-- Serif: Newsreader / Source Serif / Fraunces
-- 中文 Sans: 思源黑体 / OPPO Sans / HarmonyOS Sans
-- 中文 Serif: 思源宋体 / 霞鹜文楷
-- Mono: JetBrains Mono / Geist Mono / Berkeley Mono
+**中文 Windows 优先序说明**：思源黑体（`Source Han Sans SC` / `Source Han Sans CN`）在 `Microsoft YaHei` **之前**——装了思源的 Windows 用户优先看思源（字距/笔画粗细更接近 macOS PingFang，跨平台一致性更好），没装的透明 fallback 到微软雅黑。
+
+**为什么不引入西文 Serif / 中文 web 字体**（已在 RFC-0008 §3 论证）：
+- 西文 Serif：v1 阶段只用一种字形做层级，未来需要再加；现在引入 + 删除成本不对称。
+- 中文 web 字体：单文件 5MB+ 严重超 `ARCHITECTURE.md §9` 性能预算；CJK 自动子集化在 Astro Fonts API 不支持。
+
+
 
 ### 2.2 字号阶梯（Type Scale）
 

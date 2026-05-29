@@ -293,12 +293,30 @@ pnpm install --frozen-lockfile
 |---|---|
 | 首页 JS（gzip） | < 30 KB |
 | 首页 CSS（gzip） | < 20 KB |
+| 首页字体（gzip，总） | < 200 KB |
 | LCP | < 1.5s（4G 模拟） |
 | CLS | < 0.05 |
 | Lighthouse Performance | ≥ 95 |
 | Lighthouse Accessibility | ≥ 95 |
 
 突破预算前必须在 RFC 中论证。
+
+### 9.1 Web 字体（RFC-0008）
+
+详见 [`docs/rfcs/0008-fonts-strategy.md`](./rfcs/0008-fonts-strategy.md)。
+
+| 字体 | 用途 | 字重 | 字符集 | 加载策略 |
+|---|---|---|---|---|
+| Inter Variable | 西文 Sans | 400/500/600/700 | latin + latin-ext | `<Font preload />`，首屏即用 |
+| JetBrains Mono Variable | 等宽 | 400/500/700 | latin | 不 preload，懒加载 |
+
+**接入方式**：Astro 5 内置 `experimental.fonts` + `fontProviders.google()`。
+- 构建期：在构建机器上下载字体文件，写入 `dist/_astro/`，**自动 size-adjust + 子集化**。
+- 运行时：访客浏览器**仅**请求 `<your-site>/_astro/...`，**完全不接触** `fonts.googleapis.com` / `fonts.gstatic.com`（隐私自检见 RFC §4.7）。
+- 中文：继续走系统栈，不引入任何 CJK web 字体（避免 5MB+ 单文件破预算）。
+
+**本节不影响 §7.1 的 `allowBuilds`**：Astro fonts 不引入新原生构建依赖。
+
 
 ---
 

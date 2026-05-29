@@ -177,22 +177,42 @@
 
 ### 5.1 字体栈
 
+> 已选型 — 详见 [`../rfcs/0008-fonts-strategy.md`](../rfcs/0008-fonts-strategy.md)。
+> 西文走自托管 web 字体（Astro experimental.fonts），中文走系统栈。
+
 ```css
 :root {
+  /* 西文优先 → 系统西文兜底 → 系统中文兜底（Windows 思源 > 雅黑） */
   --font-sans:
-    ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
-    "Segoe UI", "PingFang SC", "Hiragino Sans GB",
-    "Microsoft YaHei", sans-serif;
+    var(--font-inter, ""),
+    ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+    "PingFang SC", "Hiragino Sans GB",
+    "Source Han Sans SC", "Source Han Sans CN", "Noto Sans CJK SC",
+    "Microsoft YaHei",
+    sans-serif;
 
+  /* Serif：v1 不主动使用，预留给未来长文 */
   --font-serif:
     ui-serif, Georgia, Cambria, "Times New Roman",
     "Source Han Serif SC", "Noto Serif CJK SC", serif;
 
+  /* 等宽：连字在 globals.css 中通过 font-variant-ligatures: none 关闭 */
   --font-mono:
-    ui-monospace, "JetBrains Mono", "Fira Code",
-    "SF Mono", Menlo, Consolas, monospace;
+    var(--font-jetbrains-mono, ""),
+    ui-monospace, "SF Mono", Menlo, Consolas, monospace;
 }
 ```
+
+| Web 字体 | CSS 变量 | 字重 | 字符集 | 加载 |
+|---|---|---|---|---|
+| Inter Variable | `--font-inter` | 400/500/600/700 | latin + latin-ext | preload，首屏即用 |
+| JetBrains Mono Variable | `--font-jetbrains-mono` | 400/500/700 | latin | 不 preload，懒加载 |
+
+**关键设计**：
+1. `var(--font-inter, "")` 的空字符串 fallback 让"Astro fonts 启用前 / 加载失败"窗口期自动跳到下一项（system-ui），不会出现非法的 `font-family: , …` 整条声明被忽略。
+2. **Windows 中文优先序**：`Source Han Sans SC` / `Source Han Sans CN` 在 `Microsoft YaHei` **之前**——装了思源的 Windows 用户优先看思源，没装的透明退回微软雅黑（仓库主人偏好）。
+3. **不引入任何 CJK web 字体**（避免 5MB+ 单文件破坏 LCP 预算）。
+
 
 ### 5.2 字号
 
@@ -365,3 +385,4 @@
 | v0.6 | RFC-0007 | 新增 §4.5「页头节奏」：`--hero-pad-top/-bottom/--hero-display` 与 `--pagehead-pad-top/-bottom/--mb-title` 共 6 个语义 token |
 | v0.6.1 | RFC-0007 patch | §4.5 增 `--hero-content-max`（= `--prose-max`），统一 home / about 的 `.hero-inner` 宽度，使五页首屏左缘锚点一致；同步移除 about 的 `clamp(...,18vh,14rem)` 顶 padding 例外 |
 | v0.6.2 | RFC-0007 patch | §4.5 增 `--hero-mb-eyebrow`（= `--space-8`），统一 home / about 的 `.eyebrow → H1` 间距（about 由 48px 收紧到 32px），消除切 tab 时 H1 的纵向跳跃 |
+| v0.7 | RFC-0008 | §5.1 字体栈接入 Inter / JetBrains Mono web 字体（自托管）；Windows 中文优先序改为「思源 > 雅黑」 |

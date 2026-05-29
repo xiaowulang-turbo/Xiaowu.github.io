@@ -160,6 +160,13 @@ pre,
 samp {
   font-family: var(--font-mono);
   font-size: var(--text-code);
+  /*
+   * 关闭 JetBrains Mono 默认连字（ligatures）。
+   * 博客场景中日期 `2026-05-29` 与编号 `001` 不需要 IDE 风格的 `=>` / `!=` 合并，
+   * 连字反而干扰阅读。详见 docs/rfcs/0008-fonts-strategy.md §4.4 / §5(H)。
+   */
+  font-variant-ligatures: none;
+  font-feature-settings: "liga" 0, "calt" 0;
 }
 
 code {
