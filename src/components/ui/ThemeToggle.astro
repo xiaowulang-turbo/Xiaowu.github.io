@@ -45,17 +45,23 @@ import { t } from "@i18n/index";
     background-color: var(--color-bg-muted);
   }
 
-  .icon {
+  /*
+   * 注意：下面的图标显隐规则必须用 :global()。
+   * 原因：<Icon> 是包装组件（ThemeToggle → Icon.astro → astro-icon → <svg>），
+   * Astro 的 scoped CSS 只能穿一层组件边界，到不了最终的 <svg>。
+   * 这里把 :global() 严格限定在 .theme-toggle 后代下，作用域不会外溢。
+   */
+  .theme-toggle :global(.icon) {
     display: none;
   }
 
-  .theme-toggle[data-theme-state="system"] .icon-system {
+  .theme-toggle[data-theme-state="system"] :global(.icon-system) {
     display: block;
   }
-  .theme-toggle[data-theme-state="light"] .icon-sun {
+  .theme-toggle[data-theme-state="light"] :global(.icon-sun) {
     display: block;
   }
-  .theme-toggle[data-theme-state="dark"] .icon-moon {
+  .theme-toggle[data-theme-state="dark"] :global(.icon-moon) {
     display: block;
   }
 </style>
