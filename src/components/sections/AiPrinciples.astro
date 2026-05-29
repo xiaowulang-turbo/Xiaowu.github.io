@@ -1,0 +1,84 @@
+---
+/**
+ * AiPrinciples.astro — 我与 AI 协作的原则（编号宣言列表）
+ *
+ * 复用 AboutAskedQuestions 的「01/02 mono + accent 编号」范式，
+ * 扩展为：编号 + 标题 + 一句解释。
+ * 数据来自 src/data/ai.ts。
+ */
+import { AI } from "@data/ai";
+
+const principles = AI.principles;
+---
+
+<section class="principles" data-reveal>
+  <div class="container principles-inner">
+    <ol class="list">
+      {
+        principles.map((p, i) => (
+          <li class="item">
+            <span class="num" aria-hidden="true">{String(i + 1).padStart(2, "0")}</span>
+            <div class="body">
+              <h2 class="p-title">{p.title}</h2>
+              <p class="p-text">{p.body}</p>
+            </div>
+          </li>
+        ))
+      }
+    </ol>
+  </div>
+</section>
+
+<style>
+  .principles {
+    padding-block: var(--space-12) var(--space-24);
+  }
+
+  .principles-inner {
+    max-width: var(--container-max);
+  }
+
+  .list {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-12);
+  }
+
+  .item {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: var(--space-6);
+    align-items: baseline;
+    max-width: var(--prose-max);
+  }
+
+  .num {
+    font-family: var(--font-mono);
+    font-size: var(--text-h4);
+    font-weight: var(--font-weight-semibold);
+    color: var(--color-accent);
+    line-height: 1;
+  }
+
+  .body {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+  }
+
+  .p-title {
+    margin: 0;
+    font-size: var(--text-h4);
+    color: var(--color-text);
+    letter-spacing: var(--tracking-snug);
+  }
+
+  .p-text {
+    margin: 0;
+    color: var(--color-text-muted);
+    line-height: var(--leading-relaxed);
+  }
+</style>

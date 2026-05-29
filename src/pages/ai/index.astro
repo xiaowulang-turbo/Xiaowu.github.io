@@ -1,12 +1,44 @@
 ---
+/**
+ * /ai — AI 协作原则页（v1.0）
+ *
+ * 薄装配层（ARCHITECTURE.md §4.2）：页头（H1 + intro）+ AiPrinciples 区。
+ * 内容来自 src/data/ai.ts。insights / mcp / skills / lab 暂不做（见 RFC-0004 / ROADMAP）。
+ */
 import BaseLayout from "@layouts/BaseLayout.astro";
-import PlaceholderPage from "@components/sections/PlaceholderPage.astro";
+import AiPrinciples from "@components/sections/AiPrinciples.astro";
+import { AI } from "@data/ai";
 import { t } from "@i18n/index";
 ---
 
-<BaseLayout title={t("page.ai.title")} description={t("page.ai.placeholder")}>
-  <PlaceholderPage
-    title={t("page.ai.title")}
-    description={t("page.ai.placeholder")}
-  />
+<BaseLayout title={t("page.ai.title")} description={AI.intro}>
+  <section class="page-head">
+    <div class="container page-head-inner">
+      <h1 class="title">{t("page.ai.title")}</h1>
+      <p class="intro">{AI.intro}</p>
+    </div>
+  </section>
+
+  <AiPrinciples />
 </BaseLayout>
+
+<style>
+  .page-head {
+    padding-block: var(--space-24) var(--space-8);
+  }
+
+  .page-head-inner {
+    max-width: var(--prose-max);
+  }
+
+  .title {
+    margin: 0 0 var(--space-6);
+  }
+
+  .intro {
+    margin: 0;
+    color: var(--color-text-muted);
+    font-size: 1.125rem;
+    line-height: var(--leading-relaxed);
+  }
+</style>
