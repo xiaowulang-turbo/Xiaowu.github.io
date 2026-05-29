@@ -1,12 +1,85 @@
 ---
+/**
+ * /projects — Projects 列表页（v1.0）
+ *
+ * 薄装配层（ARCHITECTURE.md §4.2）：取数 → 拆分精选/归档 → 下发 section。
+ *   - Selected Work：featured: true 的旗舰项目（富卡片，链详情页）
+ *   - Archive：其余长尾项目（紧凑列表，外链 GitHub）
+ * 任一区为空则不渲染；两区皆空渲染空状态。
+ */
+import { getCollection } from "astro:content";
 import BaseLayout from "@layouts/BaseLayout.astro";
-import PlaceholderPage from "@components/sections/PlaceholderPage.astro";
+import ProjectsSelected from "@components/sections/ProjectsSelected.astro";
+import ProjectsArchive from "@components/sections/ProjectsArchive.astro";
 import { t } from "@i18n/index";
+
+const all = (await getCollection("projects")).filter((p) => !p.data.draft);
+
+const byDateDesc = (a: { data: { date: Date } }, b: { data: { date: Date } }) =>
+  b.data.date.getTime() - a.data.date.getTime();
+
+const selected = all
+  .filter((p) => p.data.featured)
+  .sort((a, b) => {
+    const ao = a.data.order ?? Number.POSITIVE_INFINITY;
+    const bo = b.data.order ?? Number.POSITIVE_INFINITY;
+    return ao - bo || byDateDesc(a, b);
+  });
+
+const archive = all.filter((p) => !p.data.featured).sort(byDateDesc);
+
+const isEmpty = all.length === 0;
 ---
 
-<BaseLayout title={t("page.projects.title")} description={t("page.projects.placeholder")}>
-  <PlaceholderPage
-    title={t("page.projects.title")}
-    description={t("page.projects.placeholder")}
-  />
+<BaseLayout title={t("page.projects.title")} description={t("page.projects.intro")}>
+  <section class="page-head">
+    <div class="container page-head-inner">
+      <h1 class="title">{t("page.projects.title")}</h1>
+      <p class="intro">{t("page.projects.intro")}</p>
+    </div>
+  </section>
+
+  {selected.length > 0 && <ProjectsSelected projects={selected} />}
+  {archive.length > 0 && <ProjectsArchive projects={archive} />}
+
+  {
+    isEmpty && (
+      <section class="empty">
+        <div class="container">
+          <p class="empty-text">{t("projects.empty")}</p>
+        </div>
+      </section>
+    )
+  }
 </BaseLayout>
+
+<style>
+  .page-head {
+    padding-block: var(--space-24) var(--space-8);
+  }
+
+  .page-head-inner {
+    max-width: var(--prose-max);
+  }
+
+  .title {
+    margin: 0 0 var(--space-6);
+  }
+
+  .intro {
+    margin: 0;
+    color: var(--color-text-muted);
+    font-size: 1.125rem;
+    line-height: var(--leading-relaxed);
+  }
+
+  .empty {
+    padding-block: var(--space-16) var(--space-24);
+  }
+
+  .empty-text {
+    margin: 0;
+    color: var(--color-text-muted);
+    line-height: var(--leading-relaxed);
+  }
+</style>

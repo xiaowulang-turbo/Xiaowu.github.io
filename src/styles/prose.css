@@ -1,7 +1,95 @@
 /*
  * prose.css — MDX 正文样式
  *
- * v0.5 阶段：占位空文件。
- * v1.0 阶段：当首批文章/项目落地时，在此实现 prose 样式
- *           （标题、段落、列表、引用、代码块、图片、表格的 MDX 渲染样式）。
+ * 由首个详情页（/projects/[slug]）触发落地（RFC-0003）。
+ * 克制、token 驱动；仅作用于 .prose 容器，不污染全局。
+ * 全局已定义 h1–h4 / p / a / code 基础样式，此处只补正文节奏。
  */
+
+.prose {
+  color: var(--color-text);
+  line-height: var(--leading-relaxed);
+}
+
+/* 块级元素之间的垂直节奏 */
+.prose > * + * {
+  margin-top: var(--space-6);
+}
+
+.prose h2,
+.prose h3,
+.prose h4 {
+  margin-top: var(--space-12);
+  margin-bottom: var(--space-4);
+}
+
+.prose h2 + *,
+.prose h3 + *,
+.prose h4 + * {
+  margin-top: 0;
+}
+
+.prose p {
+  color: var(--color-text-muted);
+}
+
+/* 正文内链接用强调色 + hover 下划线 */
+.prose a {
+  color: var(--color-accent);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  text-decoration-thickness: 1px;
+  text-decoration-color: var(--color-border-strong);
+  transition: text-decoration-color var(--dur-fast) var(--ease);
+}
+
+.prose a:hover {
+  text-decoration-color: var(--color-accent);
+}
+
+.prose ul,
+.prose ol {
+  margin-block: var(--space-4);
+  padding-left: var(--space-6);
+  color: var(--color-text-muted);
+}
+
+.prose li + li {
+  margin-top: var(--space-2);
+}
+
+.prose blockquote {
+  margin: 0;
+  padding-left: var(--space-4);
+  border-left: 2px solid var(--color-border-strong);
+  color: var(--color-text-muted);
+  font-style: italic;
+}
+
+.prose pre {
+  margin: 0;
+  padding: var(--space-4);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background-color: var(--color-bg-muted);
+  overflow-x: auto;
+  line-height: var(--leading-normal);
+}
+
+/* 代码块内的 code 去掉行内 code 的底色（globals 给了行内底色） */
+.prose pre code {
+  padding: 0;
+  background: none;
+}
+
+.prose hr {
+  margin-block: var(--space-12);
+  border: none;
+  border-top: 1px solid var(--color-border);
+}
+
+.prose img {
+  max-width: 100%;
+  height: auto;
+  border-radius: var(--radius-md);
+}

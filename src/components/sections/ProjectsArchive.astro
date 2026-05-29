@@ -1,0 +1,156 @@
+---
+/**
+ * ProjectsArchive.astro — Archive（归档）
+ *
+ * 长尾项目（featured: false）的紧凑列表：插件、脚本、小工具。
+ * 复用 AboutTrackRecord 的「左 mono 年份 + 右正文」栅格。
+ * 名称直接外链 GitHub（repo），无 repo 时退回 demo，皆无则纯文本。
+ * 归档项不建详情页（按 RFC-0003）。
+ */
+import type { CollectionEntry } from "astro:content";
+import Icon from "@components/primitives/Icon.astro";
+import { t } from "@i18n/index";
+
+interface Props {
+  projects: CollectionEntry<"projects">[];
+}
+
+const { projects } = Astro.props;
+---
+
+<section class="archive" data-reveal>
+  <div class="container archive-inner">
+    <h2 class="title">{t("projects.archive.title")}</h2>
+
+    <ol class="list">
+      {
+        projects.map((p) => {
+          const { title, summary, category, date, repo, demo, techStack } = p.data;
+          const href = repo ?? demo;
+          const year = date.getFullYear();
+          return (
+            <li class="item">
+              <div class="year">{year}</div>
+              <div class="body">
+                <p class="name-line">
+                  {href ? (
+                    <a class="name" href={href} target="_blank" rel="noopener noreferrer">
+                      {title}
+                      <Icon name="arrow-up-right" size={14} class="ext" />
+                    </a>
+                  ) : (
+                    <span class="name name-static">{title}</span>
+                  )}
+                  <span class="category">{t(`projects.category.${category}`)}</span>
+                </p>
+                <p class="summary">{summary}</p>
+                {techStack && techStack.length > 0 && (
+                  <p class="tech">{techStack.join(" · ")}</p>
+                )}
+              </div>
+            </li>
+          );
+        })
+      }
+    </ol>
+  </div>
+</section>
+
+<style>
+  .archive {
+    padding-block: var(--space-12);
+  }
+
+  .archive-inner {
+    max-width: var(--container-max);
+  }
+
+  .title {
+    margin: 0 0 var(--space-8);
+    font-size: var(--text-h3);
+    color: var(--color-text);
+    letter-spacing: var(--tracking-snug);
+  }
+
+  .list {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-10);
+  }
+
+  .item {
+    display: grid;
+    grid-template-columns: clamp(80px, 12%, 120px) 1fr;
+    gap: var(--space-6);
+    align-items: baseline;
+  }
+
+  .year {
+    font-family: var(--font-mono);
+    font-size: var(--text-small);
+    color: var(--color-text-subtle);
+  }
+
+  .body {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+  }
+
+  .name-line {
+    margin: 0;
+    display: inline-flex;
+    flex-wrap: wrap;
+    gap: var(--space-3);
+    align-items: baseline;
+    line-height: var(--leading-snug);
+  }
+
+  .name {
+    color: var(--color-text);
+    font-weight: var(--font-weight-semibold);
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-1);
+  }
+
+  a.name:hover {
+    color: var(--color-accent);
+  }
+
+  .ext {
+    color: var(--color-text-subtle);
+  }
+
+  a.name:hover .ext {
+    color: var(--color-accent);
+  }
+
+  .category {
+    color: var(--color-text-subtle);
+    font-size: var(--text-small);
+  }
+
+  .summary {
+    margin: 0;
+    color: var(--color-text-muted);
+    font-size: var(--text-small);
+    line-height: var(--leading-relaxed);
+  }
+
+  .tech {
+    margin: 0;
+    color: var(--color-text-subtle);
+    font-size: var(--text-caption);
+  }
+
+  @media (max-width: 640px) {
+    .item {
+      grid-template-columns: 1fr;
+      gap: var(--space-2);
+    }
+  }
+</style>

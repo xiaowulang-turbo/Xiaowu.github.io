@@ -1,0 +1,161 @@
+---
+/**
+ * ProjectDetailHeader.astro — 项目详情页头部
+ *
+ * 返回链接 + 标题 + 元信息（日期 · category · status）+ 摘要 +
+ * 技术 chip + 源码/演示链接。复用 projects 列表页的视觉语言。
+ */
+import type { CollectionEntry } from "astro:content";
+import Icon from "@components/primitives/Icon.astro";
+import { t } from "@i18n/index";
+
+interface Props {
+  project: CollectionEntry<"projects">;
+}
+
+const { project } = Astro.props;
+const { title, summary, category, status, date, repo, demo, techStack } = project.data;
+
+const dateLabel = date.toLocaleDateString("zh-CN", { year: "numeric", month: "long" });
+---
+
+<header class="detail-head">
+  <div class="container detail-head-inner">
+    <a class="back" href="/projects">
+      <Icon name="arrow-left" class="back-arrow" />
+      {t("projects.backToList")}
+    </a>
+
+    <h1 class="title">{title}</h1>
+
+    <p class="meta">
+      <span>{dateLabel}</span>
+      <span class="dot" aria-hidden="true">·</span>
+      <span>{t(`projects.category.${category}`)}</span>
+      <span class="dot" aria-hidden="true">·</span>
+      <span class={`status status-${status}`}>{t(`projects.status.${status}`)}</span>
+    </p>
+
+    <p class="summary">{summary}</p>
+
+    {
+      techStack && techStack.length > 0 && (
+        <ul class="chips">
+          {techStack.map((tech) => (
+            <li class="chip">{tech}</li>
+          ))}
+        </ul>
+      )
+    }
+
+    {
+      (repo || demo) && (
+        <div class="links">
+          {repo && (
+            <a class="link" href={repo} target="_blank" rel="noopener noreferrer">
+              {t("projects.viewSource")}
+              <Icon name="arrow-up-right" size={14} />
+            </a>
+          )}
+          {demo && (
+            <a class="link" href={demo} target="_blank" rel="noopener noreferrer">
+              {t("projects.viewDemo")}
+              <Icon name="arrow-up-right" size={14} />
+            </a>
+          )}
+        </div>
+      )
+    }
+  </div>
+</header>
+
+<style>
+  .detail-head {
+    padding-block: var(--space-16) var(--space-8);
+  }
+
+  .detail-head-inner {
+    max-width: var(--prose-max);
+  }
+
+  .back {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    margin-bottom: var(--space-8);
+    color: var(--color-text-muted);
+    font-size: var(--text-small);
+  }
+
+  .back:hover {
+    color: var(--color-accent);
+  }
+
+  .back-arrow {
+    transition: transform var(--dur-fast) var(--ease);
+  }
+
+  .back:hover .back-arrow {
+    transform: translateX(-2px);
+  }
+
+  .title {
+    margin: 0 0 var(--space-4);
+  }
+
+  .meta {
+    margin: 0 0 var(--space-6);
+    color: var(--color-text-subtle);
+    font-size: var(--text-small);
+    display: inline-flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+    align-items: baseline;
+  }
+
+  .status-active {
+    color: var(--color-accent);
+  }
+
+  .summary {
+    margin: 0 0 var(--space-6);
+    color: var(--color-text-muted);
+    font-size: 1.0625rem;
+    line-height: var(--leading-relaxed);
+  }
+
+  .chips {
+    margin: 0 0 var(--space-6);
+    padding: 0;
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+  }
+
+  .chip {
+    padding: var(--space-1) var(--space-3);
+    border-radius: var(--radius-sm);
+    background-color: var(--color-bg-muted);
+    color: var(--color-text-muted);
+    font-size: var(--text-caption);
+  }
+
+  .links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-6);
+  }
+
+  .link {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-1);
+    color: var(--color-accent);
+    font-size: var(--text-small);
+  }
+
+  .link:hover {
+    color: var(--color-accent-hover);
+  }
+</style>

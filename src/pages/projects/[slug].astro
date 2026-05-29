@@ -1,0 +1,49 @@
+---
+/**
+ * /projects/[slug] — 项目详情页（仅精选旗舰项目）
+ *
+ * getStaticPaths 仅为 featured 且非 draft 的项目构建路由（按 RFC-0003）。
+ * 归档长尾项目不建详情页，直接外链 GitHub。
+ */
+import { type CollectionEntry, getCollection, render } from "astro:content";
+import BaseLayout from "@layouts/BaseLayout.astro";
+import ProjectDetailHeader from "@components/sections/ProjectDetailHeader.astro";
+import "@styles/prose.css";
+
+export async function getStaticPaths() {
+  const projects = await getCollection("projects");
+  return projects
+    .filter((p) => p.data.featured && !p.data.draft)
+    .map((project) => ({
+      params: { slug: project.slug },
+      props: { project },
+    }));
+}
+
+interface Props {
+  project: CollectionEntry<"projects">;
+}
+
+const { project } = Astro.props;
+const { Content } = await render(project);
+---
+
+<BaseLayout title={project.data.title} description={project.data.summary}>
+  <ProjectDetailHeader project={project} />
+
+  <article class="prose-wrap">
+    <div class="container prose">
+      <Content />
+    </div>
+  </article>
+</BaseLayout>
+
+<style>
+  .prose-wrap {
+    padding-block: var(--space-4) var(--space-24);
+  }
+
+  .prose {
+    max-width: var(--prose-max);
+  }
+</style>
