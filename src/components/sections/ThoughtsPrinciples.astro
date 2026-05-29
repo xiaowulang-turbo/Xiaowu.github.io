@@ -1,0 +1,113 @@
+---
+/**
+ * ThoughtsPrinciples.astro — 心得 · 信条墙（RFC-0006）
+ *
+ * 按主题分组呈现短信条。每组一个 <section data-reveal>，
+ * 每条复用 AboutTrackRecord 的「左 mono 条款号 + 右正文」栅格。
+ * 左列条款号即来源引用，右侧仅「标题 + 阐述」两件（守 STYLE_GUIDE §7）。
+ */
+import type { Thoughts } from "@data/thoughts";
+
+interface Props {
+  groups: Thoughts["groups"];
+}
+
+const { groups } = Astro.props;
+---
+
+{
+  groups.map((group) => (
+    <section class="group" data-reveal>
+      <div class="container group-inner">
+        <h2 class="title">
+          {group.theme}
+          {group.label && <span class="label"> · {group.label}</span>}
+        </h2>
+
+        <ol class="list">
+          {group.principles.map((p) => (
+            <li class="item">
+              <div class="ref">{p.ref}</div>
+              <div class="body">
+                <p class="principle">{p.title}</p>
+                <p class="elaboration">{p.body}</p>
+              </div>
+            </li>
+          ))}
+        </ol>
+      </div>
+    </section>
+  ))
+}
+
+<style>
+  .group {
+    padding-block: var(--space-12);
+  }
+
+  .group-inner {
+    max-width: var(--container-max);
+  }
+
+  .title {
+    margin: 0 0 var(--space-8);
+    font-size: var(--text-h3);
+    color: var(--color-text);
+    letter-spacing: var(--tracking-snug);
+  }
+
+  .label {
+    color: var(--color-text-subtle);
+    font-weight: var(--font-weight-normal);
+    font-size: var(--text-small);
+  }
+
+  .list {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-10);
+  }
+
+  .item {
+    display: grid;
+    grid-template-columns: clamp(80px, 12%, 120px) 1fr;
+    gap: var(--space-6);
+    align-items: baseline;
+  }
+
+  .ref {
+    font-family: var(--font-mono);
+    font-size: var(--text-small);
+    color: var(--color-text-subtle);
+  }
+
+  .body {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+  }
+
+  .principle {
+    margin: 0;
+    color: var(--color-text);
+    font-weight: var(--font-weight-semibold);
+    line-height: var(--leading-snug);
+  }
+
+  .elaboration {
+    margin: 0;
+    color: var(--color-text-muted);
+    font-size: var(--text-small);
+    line-height: var(--leading-relaxed);
+  }
+
+  @media (max-width: 640px) {
+    .item {
+      grid-template-columns: 1fr;
+      gap: var(--space-2);
+    }
+  }
+</style>
