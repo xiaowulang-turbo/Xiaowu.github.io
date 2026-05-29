@@ -138,6 +138,7 @@ interface Props {
 - 三态切换：light / dark / system（图标依次 sun / moon / monitor）
 - 圆形按钮，仅图标
 - aria-label 必须
+- **图标显隐由 `<html data-theme>` 驱动**（不依赖按钮自身的 `data-theme-state`）。原因：BaseLayout 的 inline script 在 first-paint 之前已把 `data-theme` 同步到终态，CSS 立刻命中正确图标；若让 CSS 看按钮 attr，MPA 切页时 SSR 默认 `data-theme-state="system"` 会先闪一帧 monitor 再被模块脚本水合纠正。`data-theme-state` 仍保留作按钮自身的语义状态（未来 a11y 化使用）。
 
 ### 3.5 `<SearchTrigger>`（v1.x 启用，先占位）
 

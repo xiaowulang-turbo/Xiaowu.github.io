@@ -55,13 +55,26 @@ import { t } from "@i18n/index";
     display: none;
   }
 
-  .theme-toggle[data-theme-state="system"] :global(.icon-system) {
+  /*
+   * 图标显隐：跟随 <html data-theme>（由 BaseLayout 的 inline script 在
+   * paint 之前同步设好），而非按钮自身的 [data-theme-state]。
+   *
+   * 原因：MPA 切页后 SSR HTML 永远默认 data-theme-state="system"
+   * （SSR 读不到 localStorage），若 CSS 看按钮 attr，会先按 system 渲染
+   * monitor 图标，等 ThemeToggle 的模块脚本水合时再切回真实图标——视觉
+   * 上就是一次"monitor → sun" 闪烁。改用 html[data-theme] 后，inline
+   * script 已在 first-paint 之前把根属性设到终态，CSS 立刻命中正确图标。
+   *
+   * 注意：必须用 :global()——见上方 .theme-toggle :global(.icon) 同款理由
+   * （Astro scoped CSS 穿不过 <Icon> 包装组件边界）。
+   */
+  :root:not([data-theme]) .theme-toggle :global(.icon-system) {
     display: block;
   }
-  .theme-toggle[data-theme-state="light"] :global(.icon-sun) {
+  :root[data-theme="light"] .theme-toggle :global(.icon-sun) {
     display: block;
   }
-  .theme-toggle[data-theme-state="dark"] :global(.icon-moon) {
+  :root[data-theme="dark"] .theme-toggle :global(.icon-moon) {
     display: block;
   }
 </style>
