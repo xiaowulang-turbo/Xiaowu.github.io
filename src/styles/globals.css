@@ -21,6 +21,26 @@ html {
   /* 终态底色挂在根上：任何空帧/异步窗口都不再露出 UA 默认色 */
   background-color: var(--color-bg);
   color: var(--color-text);
+  /*
+   * 永远预留滚动条 gutter，避免 MPA 切页 long↔short 抖动。
+   *
+   * 问题：本站 .container { margin-inline: auto } 居中容器，宽度参考
+   * html.clientWidth = innerWidth - scrollbarWidth。长页（出滚动条，约
+   * -15px）↔ 短页（无滚动条）切换时，居中点左右各跳 ~7.5px，header
+   * 内 brand / nav-link / theme-toggle 整体平移，肉眼可感为"抖动"。
+   *
+   * 注意：sticky / fixed header 也救不了——它们以视口为参考系，视口
+   * 宽度本身在变。唯一根治办法是让滚动条不再争抢视口宽度。
+   *
+   * scrollbar-gutter: stable 是 W3C CSS Overflow L3 为此场景设计的
+   * 标准 API：浏览器永远预留 scrollbar 槽位，长页用真滚动条填充，
+   * 短页留透明 gutter（显示 <html> 底色 = --color-bg，与正文同色，
+   * 视觉上仅相当于右侧 padding 多 ~15px，几乎无感）。
+   *
+   * 浏览器支持：Chrome/Edge 94+ / Firefox 97+ / Safari 16+。Safari
+   * 15.x 等旧版渐进降级到当前行为，不比现状差。
+   */
+  scrollbar-gutter: stable;
 }
 
 html[data-theme="light"] {

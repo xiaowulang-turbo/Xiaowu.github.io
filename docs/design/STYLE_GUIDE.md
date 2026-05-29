@@ -172,6 +172,18 @@ Code 0.9375rem                     family: var(--font-mono)
 - 移动优先：默认样式针对小屏，大屏用 `min-width` 媒体查询渐进增强
 - ⛔ **禁止**桌面优先回退（避免性能与样式覆盖问题）
 
+### 3.4 滚动条 gutter（布局稳定性）
+
+> **`<html>` 必须设 `scrollbar-gutter: stable`**，理由是 .container 全局居中，
+> 任何 viewport 宽度跳变都会让 header 与正文整体水平偏移 ~7.5px。
+
+- ⛔ **禁止**移除 `<html>` 上的 `scrollbar-gutter: stable`
+- ⛔ **禁止**用 `html { overflow-y: scroll }` 强制空滚动条作为替代（会显示一条灰色"假"轨道，破坏极简观感）
+- 短页（`/`、`/ai` 等内容不溢出的页面）右侧将恒定预留 ~15px 透明 gutter，显示 `--color-bg`，与正文同色，视觉无缝
+- sticky / fixed header **救不了**此问题——它们以视口为参考系，视口宽度本身在变化。`scrollbar-gutter` 是 W3C 为此场景设计的标准 API，不是 hack
+- 浏览器支持：Chrome/Edge 94+ / Firefox 97+ / Safari 16+。旧版渐进降级到原行为，不比现状差
+- 实现：`src/styles/globals.css` 的 `html` 块，附详细注释说明根因
+
 ---
 
 ## 4. 圆角与阴影
